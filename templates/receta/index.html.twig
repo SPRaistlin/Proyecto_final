@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Receta index{% endblock %}
+
+{% block body %}
+    <h1>Receta index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Ingredientes</th>
+                <th>Preparacion</th>
+                <th>Dificultad</th>
+                <th>Created</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for recetum in recetas %}
+            <tr>
+                <td>{{ recetum.id }}</td>
+                <td>{{ recetum.nombre }}</td>
+                <td>{{ recetum.ingredientes }}</td>
+                <td>{{ recetum.preparacion }}</td>
+                <td>{{ recetum.dificultad }}</td>
+                <td>{{ recetum.created ? recetum.created|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('receta_show', {'id': recetum.id}) }}">show</a>
+                    <a href="{{ path('receta_edit', {'id': recetum.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('receta_new') }}">Create new</a>
+{% endblock %}
