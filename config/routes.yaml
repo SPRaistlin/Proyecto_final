@@ -32,11 +32,3 @@ usuario:
 registrar_usuario:
     path: usuario/new
     controller: App\Controller\UsuarioController::usuario_new
-login:
-    path: login
-    controller: App\Controller\SecurityController::app_login
-logout:
-    path: logout
-    controller: App\Controller\SecurityController::logoutAction
-login_check:
-    path: login_check
