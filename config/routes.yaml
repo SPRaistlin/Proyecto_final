@@ -1,3 +1,42 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+index:
+    path: /
+    controller: App\Controller\IndexController::index
+
+desayunos:
+    path: "categoria/1"
+    controller: App\Controller\CategoriaController::categoria_show
+aperitivos:
+    path: "categoria/2"
+    controller: App\Controller\CategoriaController::categoria_show
+almuerzos:
+    path: "categoria/3"
+    controller: App\Controller\CategoriaController::categoria_show
+comidas:
+    path: "categoria/4"
+    controller: App\Controller\CategoriaController::categoria_show
+meriendas:
+    path: "categoria/5"
+    controller: App\Controller\CategoriaController::categoria_show
+cenas:
+    path: "categoria/6"
+    controller: App\Controller\CategoriaController::categoria_show
+postres:
+    path: "categoria/7"
+    controller: App\Controller\CategoriaController::categoria_show
+bebidas:
+    path: "categoria/8"
+    controller: App\Controller\CategoriaController::categoria_show
+usuario:
+    path: usuario
+    controller: App\Controller\UsuarioController::usuario_index
+registrar_usuario:
+    path: usuario/new
+    controller: App\Controller\UsuarioController::usuario_new
+login:
+    path: login
+    controller: App\Controller\SecurityController::app_login
+logout:
+    path: logout
+    controller: App\Controller\SecurityController::logoutAction
+login_check:
+    path: login_check

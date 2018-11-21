@@ -29,3 +29,26 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    # Menu
+    app.menu_builder:
+        class: App\Menu\MenuBuilder
+        public: true
+        arguments: ["@knp_menu.factory"]
+        tags:
+           - { name: knp_menu.menu_builder, method: createMainMenu, alias: main } 
+           - { name: knp_menu.menu_builder, method: createSidebarMenu, alias: sidebar }
+           
+    app.menu.main:
+        class: Knp\Menu\MenuItem 
+        factory: ["@app.menu_builder", 'createMainMenu']
+        arguments: ["@request_stack"]
+        tags:
+            - { name: knp_menu.menu, alias: main } 
+            
+    app.sidebar_menu:
+        class: Knp\Menu\MenuItem
+        factory: ["@app.menu_builder", 'createSidebarMenu']
+        arguments: ["@request_stack"]
+        tags:
+            - { name: knp_menu.menu, alias: sidebar } 
+    

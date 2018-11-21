@@ -5,12 +5,17 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UsuarioRepository")
  * @ORM\HasLifecycleCallbacks()
+ * @UniqueEntity(fields="email", message="Email already taken")
+ * @UniqueEntity(fields="apodo", message="Username already taken")
  */
-class Usuario
+class Usuario implements UserInterface
 {
     /**
      * @ORM\Id()
@@ -33,6 +38,12 @@ class Usuario
      * @ORM\Column(type="string", length=250)
      */
     private $email;
+    
+    /**
+     * @Assert\NotBlank
+     * @Assert\Length(max=4096)
+     */
+    private $plainPassword; 
 
     /**
      * @ORM\Column(type="string", length=250)
@@ -57,6 +68,7 @@ class Usuario
     /**
      * @return string
      */
+
      public function __toString()
     {
         return strval($this->apodo);
@@ -65,6 +77,7 @@ class Usuario
     public function __construct()
     {
         $this->recetas = new ArrayCollection();
+        $this->roles = array('ROLE_USER');
     }
 
     public function getId(): ?int
@@ -107,7 +120,17 @@ class Usuario
 
         return $this;
     }
+    
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
+    }
 
+    public function setPlainPassword($password)
+    {
+        $this->plainPassword = $password;
+    }
+    
     public function getPass(): ?string
     {
         return $this->pass;
@@ -143,7 +166,12 @@ class Usuario
 
         return $this;
     }
-
+    
+    /**
+     * @ORM\Column(type="array")
+     */
+    private $roles;
+    
     /**
      * @return Collection|Receta[]
      */
@@ -179,6 +207,33 @@ class Usuario
     * @ORM\PrePersist
     */
     public function setCreatedValue() {
+        
         $this->created = new \DateTime();
     }
+    
+    public function getSalt()
+    {
+        // The bcrypt and argon2i algorithms don't require a separate salt.
+        // You *may* need a real salt if you choose a different encoder.
+        return null;
+    }
+
+    public function getRoles()
+    {
+        return $this->roles;
+    }
+    public function getUsername(){
+        
+        return $this->apodo;
+    }
+    
+    public function getPassword(){
+        
+        return $this->plainPassword;
+    }
+    
+    public function eraseCredentials()
+    {
+    }
+    
 }
