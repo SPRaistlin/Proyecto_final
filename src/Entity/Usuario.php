@@ -15,7 +15,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @UniqueEntity(fields="email", message="Email already taken")
  * @UniqueEntity(fields="apodo", message="Username already taken")
  */
-class Usuario implements UserInterface
+class Usuario implements UserInterface, \Serializable
 {
     /**
      * @ORM\Id()
@@ -77,7 +77,7 @@ class Usuario implements UserInterface
     public function __construct()
     {
         $this->recetas = new ArrayCollection();
-        $this->roles = array('ROLE_USER');
+        //$this->roles = array('ROLE_USER');
     }
 
     public function getId(): ?int
@@ -129,6 +129,7 @@ class Usuario implements UserInterface
     public function setPlainPassword($password)
     {
         $this->plainPassword = $password;
+        $this->password = null;
     }
     
     public function getPass(): ?string
@@ -166,12 +167,7 @@ class Usuario implements UserInterface
 
         return $this;
     }
-    
-    /**
-     * @ORM\Column(type="array")
-     */
-    private $roles;
-    
+  
     /**
      * @return Collection|Receta[]
      */
@@ -213,14 +209,12 @@ class Usuario implements UserInterface
     
     public function getSalt()
     {
-        // The bcrypt and argon2i algorithms don't require a separate salt.
-        // You *may* need a real salt if you choose a different encoder.
         return null;
     }
 
     public function getRoles()
     {
-        return $this->roles;
+        return array('ROLE_USER');
     }
     public function getUsername(){
         
@@ -229,11 +223,33 @@ class Usuario implements UserInterface
     
     public function getPassword(){
         
-        return $this->plainPassword;
+        return $this->pass;
     }
     
     public function eraseCredentials()
     {
+        $this->plainPassword = null;
     }
     
+    /** @see \Serializable::serialize() */
+    public function serialize()
+    {
+        return serialize([
+            $this->id,
+            $this->apodo,
+            $this->email,
+            $this->pass
+        ]);
+    }
+    
+    /** @see \Serializable::unserialize() */
+    public function unserialize($string)
+    {
+        list(
+            $this->id,
+            $this->apodo,
+            $this->email,
+            $this->pass                
+            ) = unserialize($string, ['allowed_classes' => false]);
+    }
 }

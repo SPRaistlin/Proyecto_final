@@ -28,7 +28,13 @@ bebidas:
     controller: App\Controller\CategoriaController::categoria_show
 usuario:
     path: usuario
-    controller: App\Controller\UsuarioController::usuario_index
+    controller: App\Controller\UsuarioController::index
 registrar_usuario:
     path: usuario/new
     controller: App\Controller\UsuarioController::usuario_new
+registro:
+    path: registro
+perfil:
+    path: perfil
+    controller: App\Controller\UsuarioController::perfilUsuario
+    

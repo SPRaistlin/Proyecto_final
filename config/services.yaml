@@ -51,4 +51,4 @@ services:
         arguments: ["@request_stack"]
         tags:
             - { name: knp_menu.menu, alias: sidebar } 
-    
+            

@@ -19,12 +19,7 @@
     <div class="container text-center">
         <br>
         <!-- Añadir una variable que recibira un texto. Así podemos utilizar esta página para los errores 404 -->
-        <h1 class="text-muted">
-            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                {{'Bienvenido' | trans}}
-                {{ app.user.username}}
-            {% endif %}
-        </h1>
+       
         {% block sidebar %} 
             {{ knp_menu_render('sidebar') }}
         {% endblock %}

@@ -236,3 +236,24 @@ html {height:100%}
   background-color: #fff;
   margin-top: 10px;
 }
+
+
+/*Mariano Edit*/
+a:not([href]):not([tabindex]){
+    color: #FFF !important;
+}
+.example-wrapper { 
+    margin: 1em auto; 
+    max-width: 800px; 
+    width: 95%; 
+    font: 18px/1.5 sans-serif; 
+}
+.example-wrapper code { 
+    background: #F5F5F5; 
+    padding: 2px 6px; 
+}
+
+.dropdown-menu li a{
+    color: #000 !important;
+    padding-left: 20% !important;
+}
