@@ -10,13 +10,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/receta")
- */
+
 class RecetaController extends AbstractController
 {
     /**
-     * @Route("/", name="receta_index", methods="GET")
+     * @Route("/receta", name="receta_index", methods="GET")
      */
     public function index(RecetaRepository $recetaRepository): Response
     {
@@ -24,7 +22,7 @@ class RecetaController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="receta_new", methods="GET|POST")
+     * @Route("/receta/new", name="receta_new", methods="GET|POST")
      */
     public function new(Request $request): Response
     {
@@ -47,7 +45,7 @@ class RecetaController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="receta_show", methods="GET")
+     * @Route("/receta/{id}", name="receta_show", methods="GET")
      */
     public function show(Receta $recetum): Response
     {
@@ -55,7 +53,7 @@ class RecetaController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="receta_edit", methods="GET|POST")
+     * @Route("/receta/{id}/edit", name="receta_edit", methods="GET|POST")
      */
     public function edit(Request $request, Receta $recetum): Response
     {
@@ -75,7 +73,7 @@ class RecetaController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="receta_delete", methods="DELETE")
+     * @Route("/receta/{id}", name="receta_delete", methods="DELETE")
      */
     public function delete(Request $request, Receta $recetum): Response
     {
@@ -87,6 +85,28 @@ class RecetaController extends AbstractController
 
         return $this->redirectToRoute('receta_index');
     }
+  
+    /**
+     * Últimas recetas
+     */
+    public function ultimasRecetas(RecetaRepository $recetaRepository, $max = 5): Response
+    {
+        return $this->render('receta/ultimas.html.twig', ['recetas' =>$recetaRepository->findBy(array(),array('id' => 'DESC'),$max)]);
+    }
     
+    /**
+     * Listado recetas por categoría
+     * @Route("/categoria/{nombre}", name="mostrar_categoria", methods="GET")
+    */
+    public function listadoRecetas(RecetaRepository $recetaRepository, $nombre): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        $categoria = $em->getRepository('App:Categoria')->findOneBy(array('nombre' => $nombre));
+        $catid = $categoria->getId();
+
+        return $this->render('receta/listadofiltrado.html.twig', ['recetas' =>$recetaRepository->findBy(array('categoria' => $catid),array('categoria' => 'DESC')),
+            'categoria' => $nombre
+            ]);
+    }
     
 }

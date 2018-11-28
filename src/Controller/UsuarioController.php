@@ -89,7 +89,7 @@ class UsuarioController extends AbstractController
     }
     
     /**
-     * @Route("perfil", name="perfil", methods="GET")
+     * @Route("/perfil", name="perfil", methods="GET")
      */
     public function perfilUsuario(UsuarioRepository $usuarioRepository): Response {
         return $this->render('usuario/index.html.twig', ['usuarios' => $usuarioRepository->findAll()]);

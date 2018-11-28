@@ -17,13 +17,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
-/**
- * @Route("/categoria")
- */
+
 class CategoriaController extends AbstractController
 {
     /**
-     * @Route("/", name="categoria_index", methods="GET")
+     * @Route("/categoria", name="categoria_index", methods="GET")
      */
     public function index(CategoriaRepository $categoriaRepository): Response
     {
@@ -31,7 +29,7 @@ class CategoriaController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="categoria_new", methods="GET|POST")
+     * @Route("/categoria/new", name="categoria_new", methods="GET|POST")
      */
     public function new(Request $request): Response
     {
@@ -54,7 +52,7 @@ class CategoriaController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="categoria_show", methods="GET")
+     * @Route("/categoria/{id}", name="categoria_show", methods="GET")
      */
     public function show(Categoria $categorium): Response
     {
@@ -62,7 +60,7 @@ class CategoriaController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="categoria_edit", methods="GET|POST")
+     * @Route("/categoria/{id}/edit", name="categoria_edit", methods="GET|POST")
      */
     public function edit(Request $request, Categoria $categorium): Response
     {
@@ -82,7 +80,7 @@ class CategoriaController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="categoria_delete", methods="DELETE")
+     * @Route("/categoria/{id}", name="categoria_delete", methods="DELETE")
      */
     public function delete(Request $request, Categoria $categorium): Response
     {
@@ -93,5 +91,6 @@ class CategoriaController extends AbstractController
         }
 
         return $this->redirectToRoute('categoria_index');
-    }
+    } 
+    
 }

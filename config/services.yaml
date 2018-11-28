@@ -33,7 +33,7 @@ services:
     app.menu_builder:
         class: App\Menu\MenuBuilder
         public: true
-        arguments: ["@knp_menu.factory"]
+        arguments: ["@knp_menu.factory", "@doctrine.orm.entity_manager"]
         tags:
            - { name: knp_menu.menu_builder, method: createMainMenu, alias: main } 
            - { name: knp_menu.menu_builder, method: createSidebarMenu, alias: sidebar }
@@ -41,7 +41,7 @@ services:
     app.menu.main:
         class: Knp\Menu\MenuItem 
         factory: ["@app.menu_builder", 'createMainMenu']
-        arguments: ["@request_stack"]
+        arguments: ["@request_stack", "@doctrine.orm.entity_manager"]
         tags:
             - { name: knp_menu.menu, alias: main } 
             

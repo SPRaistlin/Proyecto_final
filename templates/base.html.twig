@@ -13,18 +13,23 @@
 </head>
 <body>
     {% block navigation %} 
-         {{ knp_menu_render('main',{'template':'menu.html.twig','allow_safe_labels': true}) }}
+         {#knp_menu_render('main',{'template':'menu.html.twig','allow_safe_labels': true})#}
+         {{ knp_menu_render('main',{'template':'menu.html.twig'})}}
     {% endblock %}
-{% block body %}
-    <div class="container text-center">
-        <br>
-        <!-- Añadir una variable que recibira un texto. Así podemos utilizar esta página para los errores 404 -->
-       
-        {% block sidebar %} 
-            {{ knp_menu_render('sidebar') }}
+     <div class="container">
+         <div class="row">
+             <div class="col-xs-12 col-md-8">
+                {% block body %}
+                    <br>
+                {% endblock %}
+             </div>
+        {% block sidebar %}
+            <div id="sidebar" class="col-xs-6 col-md-4"> 
+                {% include('sidebar.html.twig') %}
+            </div>
         {% endblock %}
+        </div>
     </div>
-{% endblock %}
 <footer class="footer">
     <div class="container text-center">
         <!-- Texto del footer -->

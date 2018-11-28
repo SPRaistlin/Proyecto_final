@@ -257,3 +257,13 @@ a:not([href]):not([tabindex]){
     color: #000 !important;
     padding-left: 20% !important;
 }
+.navbar-nav li a{
+    font-size: 1.05rem;
+    text-align: right;
+}
+.navbar-nav{
+    margin-left: 5%;
+}
+.logoleft{
+    margin-left: 5%;
+}

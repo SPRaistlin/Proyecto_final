@@ -1,0 +1,17 @@
+{% block body %}
+    <div class="content">
+    {% block title %}Últimas Recetas{% endblock %}
+
+    {% block content %}
+            {% for receta in recetas %}
+                 <p>{{ receta.nombre }}</p>
+                    <p>{{ receta.ingredientes }}</p>
+                    <p>{{ receta.preparacion }}</p>
+                    <p>{{ receta.dificultad }}</p>
+                    <p>Creado en la categoría <a href="{{ path( 'mostrar_categoria', {'nombre' : receta.categoria|lower } )}}"><span style="color:blue">{{ receta.categoria }}</span></a> por el usuario <span style="color: pink">{{ receta.usuario }}</span></p>
+                {% else %}
+                     <div class="well">No se han encontrado recetas</div>
+            {% endfor %}  
+    {% endblock %}
+    </div>
+{% endblock %}
