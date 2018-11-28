@@ -8,15 +8,20 @@ use App\Repository\CategoriaRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/categoria")
- */
+use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+
+
 class CategoriaController extends AbstractController
 {
     /**
-     * @Route("/", name="categoria_index", methods="GET")
+     * @Route("/categoria", name="categoria_index", methods="GET")
      */
     public function index(CategoriaRepository $categoriaRepository): Response
     {
@@ -24,7 +29,7 @@ class CategoriaController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="categoria_new", methods="GET|POST")
+     * @Route("/categoria/new", name="categoria_new", methods="GET|POST")
      */
     public function new(Request $request): Response
     {
@@ -47,7 +52,7 @@ class CategoriaController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="categoria_show", methods="GET")
+     * @Route("/categoria/{id}", name="categoria_show", methods="GET")
      */
     public function show(Categoria $categorium): Response
     {
@@ -55,7 +60,7 @@ class CategoriaController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="categoria_edit", methods="GET|POST")
+     * @Route("/categoria/{id}/edit", name="categoria_edit", methods="GET|POST")
      */
     public function edit(Request $request, Categoria $categorium): Response
     {
@@ -75,7 +80,7 @@ class CategoriaController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="categoria_delete", methods="DELETE")
+     * @Route("/categoria/{id}", name="categoria_delete", methods="DELETE")
      */
     public function delete(Request $request, Categoria $categorium): Response
     {
@@ -86,5 +91,6 @@ class CategoriaController extends AbstractController
         }
 
         return $this->redirectToRoute('categoria_index');
-    }
+    } 
+    
 }
