@@ -9,3 +9,7 @@ perfil:
 mostrar_categoria:
     path: /recetas/{nombre}
     controller:  App\Controller\RecetaController:listadoRecetas
+    
+menu:
+    path: /recetas/{nombre}
+    controller:  App\Controller\CategoriaController:menuCategorias

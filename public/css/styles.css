@@ -259,11 +259,13 @@ a:not([href]):not([tabindex]){
 }
 .navbar-nav li a{
     font-size: 1.05rem;
-    text-align: right;
 }
 .navbar-nav{
     margin-left: 5%;
 }
 .logoleft{
     margin-left: 5%;
+}
+ul.navbar-nav.ml-auto.marginright{
+    margin-right: 10%;
 }

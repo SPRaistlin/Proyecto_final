@@ -42,39 +42,38 @@ class MenuBuilder implements ContainerAwareInterface
         $this->em = $em;
     }
 
-    public function createMainMenu()
+    public function createMainMenu($ismenu)
     {
         $menu = $this->factory->createItem('root');
         //$em = $this->em->getManager();
-        $categorias = $this->em->getRepository('App:Categoria')->findAll();
+        $categorias = $this->em->getRepository('App:Categoria')->findBy( array('is_menu' => $ismenu));
         $menu->addChild('', array('route' => 'index'))->setExtra('icon', 'fa-home');
         foreach ($categorias as $categoria)
         {
              $menu->addChild($categoria->getNombre(),[
                 'label' => $categoria->getNombre(),
-                'route' => 'mostrar_categoria',
+                'route' => 'menu',
                 'routeParameters' =>  array('nombre' => strtolower($categoria->getNombre()))
             ]); 
 
         }
-        /*$menu['Categorias']->addChild('Desayunos', ['route' => 'desayunos']);
-        $menu['Categorias']->addChild('Aperitivos', ['route' => 'aperitivos']);
-        $menu['Categorias']->addChild('Almuerzos', ['route' => 'almuerzos']);
-        $menu['Categorias']->addChild('Comidas', ['route' => 'comidas']);
-        $menu['Categorias']->addChild('Meriendas', ['route' => 'meriendas']);
-        $menu['Categorias']->addChild('Cenas', ['route' => 'cenas']);
-        $menu['Categorias']->addChild('Postres', ['route' => 'postres']);
-        $menu['Categorias']->addChild('Bebidas', ['route' => 'bebidas']);*/
-        
-       
+              
         return $menu;
     }
-     public function createSidebarMenu(RequestStack $requestStack)
+    public function createSidebarMenu()
     {
-        $menu = $this->factory->createItem('sidebar');
-
+        $menu = $this->factory->createItem('root');
+        $categorias = $this->em->getRepository('App:Categoria')->findBy( array('is_menu' => 0));
         $menu->addChild('Home', ['route' => 'index']);
-        // ... add more children
+        foreach ($categorias as $categoria)
+        {
+             $menu->addChild($categoria->getNombre(),[
+                'label' => $categoria->getNombre(),
+                'route' => 'menu',
+                'routeParameters' =>  array('nombre' => strtolower($categoria->getNombre()))
+            ]); 
+
+        }
 
         return $menu;
     }

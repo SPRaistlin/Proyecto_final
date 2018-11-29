@@ -108,5 +108,5 @@ class RecetaController extends AbstractController
             'categoria' => $nombre
             ]);
     }
-    
+        
 }

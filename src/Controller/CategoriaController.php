@@ -91,6 +91,19 @@ class CategoriaController extends AbstractController
         }
 
         return $this->redirectToRoute('categoria_index');
-    } 
+    }
     
+    /**
+     * Listado recetas por categoría
+     * @Route("/recetas/{nombre}", name="menu", methods="GET")
+    */
+    public function menuCategorias(CategoriaRepository $recetaRepository, $nombre): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        //$categoria = $em->getRepository('App:Categoria')->find(array('nombre' => $nombre, 'is_menu' => '1'));
+        //$catid = $categoria->getId();
+        return $this->render('receta/listadofiltrado.html.twig', ['recetas' =>$recetaRepository->findBy(array('categoria' => $catid),array('categoria' => 'DESC')),
+            'categoria' => $nombre
+            ]);
+    }
 }
