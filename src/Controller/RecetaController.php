@@ -108,5 +108,27 @@ class RecetaController extends AbstractController
             'categoria' => $nombre
             ]);
     }
+    /**
+     * @Route("/crear-receta", name="crearReceta", methods="GET|POST")
+     */
+    public function crearReceta(Request $request): Response
+    {
+        $recetum = new Receta();
+        $form = $this->createForm(RecetaType::class, $recetum);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($recetum);
+            $em->flush();
+
+            return $this->redirectToRoute('receta_index');
+        }
+
+        return $this->render('receta/crearReceta.html.twig', [
+            'recetum' => $recetum,
+            'form' => $form->createView(),
+        ]);
+    }
         
 }

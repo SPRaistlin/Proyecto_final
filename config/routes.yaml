@@ -3,7 +3,7 @@ index:
     controller: App\Controller\IndexController::index
 
 perfil:
-    path: perfil
+    path: /perfil/{apodo}
     controller: App\Controller\UsuarioController::perfilUsuario
     
 mostrar_categoria:
@@ -13,3 +13,7 @@ mostrar_categoria:
 menu:
     path: /recetas/{nombre}
     controller:  App\Controller\CategoriaController:menuCategorias
+    
+crear-receta:
+    path: /crear-receta
+    controller: App\Controller\RecetaController:crearReceta

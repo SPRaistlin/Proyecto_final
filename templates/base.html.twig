@@ -19,7 +19,7 @@
         </button>
     {% block navigation %} 
          {#knp_menu_render('main',{'template':'menu.html.twig','allow_safe_labels': true})#}
-         {{ knp_menu_render('main',{'template':'menu.html.twig', 'ismenu' : 1} ) }}
+         {{ knp_menu_render('main',{'template':'menu.html.twig'} ) }}
     {% endblock %}  
         <ul class="navbar-nav ml-auto">
            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
@@ -31,10 +31,10 @@
                     </a>
                     <ul class="dropdown-menu menu_level_1">
                         <li class="nav-item dropdown">
-                            <a class="dropdown-item" href="{{ path('perfil') }}">{{ 'Perfil'| trans }}</a>
+                            <a class="dropdown-item" href="{{ path('perfil',{'apodo' : app.user.apodo}) }}">{{ 'Perfil'| trans }}</a>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="dropdown-item" href="#">{{ 'Crear Receta'| trans }}</a>
+                            <a class="dropdown-item" href="{{ path('crear-receta') }}">{{ 'Crear Receta'| trans }}</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="dropdown-item" href="{{ path('logout') }}">{{ 'Salir'| trans }}</a>

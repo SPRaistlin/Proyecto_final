@@ -42,11 +42,11 @@ class MenuBuilder implements ContainerAwareInterface
         $this->em = $em;
     }
 
-    public function createMainMenu($ismenu)
+    public function createMainMenu()
     {
         $menu = $this->factory->createItem('root');
         //$em = $this->em->getManager();
-        $categorias = $this->em->getRepository('App:Categoria')->findBy( array('is_menu' => $ismenu));
+        $categorias = $this->em->getRepository('App:Categoria')->findBy( array('is_menu' =>  1));
         $menu->addChild('', array('route' => 'index'))->setExtra('icon', 'fa-home');
         foreach ($categorias as $categoria)
         {

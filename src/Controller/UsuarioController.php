@@ -10,13 +10,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/usuario")
- */
+
 class UsuarioController extends AbstractController
 {
     /**
-     * @Route("/", name="usuario_index", methods="GET")
+     * @Route("/usuario", name="usuario_index", methods="GET")
      */
     public function index(UsuarioRepository $usuarioRepository): Response
     {
@@ -89,10 +87,29 @@ class UsuarioController extends AbstractController
     }
     
     /**
-     * @Route("/perfil", name="perfil", methods="GET")
+     * @Route("/perfil/{usuario}", name="perfil", methods="GET|POST")
      */
-    public function perfilUsuario(UsuarioRepository $usuarioRepository): Response {
-        return $this->render('usuario/index.html.twig', ['usuarios' => $usuarioRepository->findAll()]);
+    public function perfilUsuario(Request $request,Usuario $usuario): Response {
+        
+        
+        $form = $this->createForm(UsuarioType::class, $usuario);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) 
+        {
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('perfil', ['apodo' => $usuario->getApodo(), 'change' => 'ok']);
+        } 
+        else if ($form->isEmpty() && $form->isDisabled())
+        {
+            return $this->redirectToRoute('perfil', ['apodo' => $usuario->getApodo(), 'change' => 'ko']);
+        }        
+
+        return $this->render('usuario/perfil.html.twig', [
+            'usuario' => $usuario,
+            'form' => $form->createView(),
+        ]);
     }
 
 }
