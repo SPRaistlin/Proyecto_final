@@ -9,12 +9,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UsuarioController extends AbstractController
 {
     /**
-     * @Route("/usuario", name="usuario_index", methods="GET")
+     * @Route("/admin/usuario", name="usuario_index", methods="GET")
      */
     public function index(UsuarioRepository $usuarioRepository): Response
     {
@@ -22,9 +22,9 @@ class UsuarioController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="usuario_new", methods="GET|POST")
+     * @Route("/admin/usuario/new", name="usuario_new", methods="GET|POST")
      */
-    public function new(Request $request): Response
+    public function new(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {
         $usuario = new Usuario();
         $form = $this->createForm(UsuarioType::class, $usuario);
@@ -32,6 +32,8 @@ class UsuarioController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $password = $passwordEncoder->encodePassword($usuario, $usuario->getPlainPassword());
+            $usuario->setPass($password);
             $em->persist($usuario);
             $em->flush();
 
@@ -45,7 +47,7 @@ class UsuarioController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="usuario_show", methods="GET")
+     * @Route("/admin/usuario/{id}", name="usuario_show", methods="GET")
      */
     public function show(Usuario $usuario): Response
     {
@@ -53,7 +55,7 @@ class UsuarioController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="usuario_edit", methods="GET|POST")
+     * @Route("admin/usuario/{id}/edit", name="usuario_edit", methods="GET|POST")
      */
     public function edit(Request $request, Usuario $usuario): Response
     {
@@ -73,7 +75,39 @@ class UsuarioController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="usuario_delete", methods="DELETE")
+     * @Route("admin/usuario/activar-desactivar/{id}", name="usuario_actdesact", methods="GET")
+     */
+    public function activarDesactivar(UsuarioRepository $usuarioRepository,$id): Response
+    {
+
+        $usuario = $usuarioRepository->findOneBy([
+            'id' => $id,
+        ]);
+        $em = $this->getDoctrine()->getManager();
+        $usuarios = $em->getRepository("App:Usuario");
+        
+        if ($usuario->getIsActive()) 
+        {
+            $us = $usuarios->find($id);
+            $us->setIsActive('0');
+            $em->persist($us);
+            $flush = $em->flush();
+            $this->addFlash("error","El Usuario ".$us->getApodo()." ha sido desactivado");
+
+        } else {
+
+            $us = $usuarios->find($id);
+            $us->setIsActive('1');
+            $em->persist($us);
+            $flush = $em->flush();
+            $this->addFlash("success","Usuario ".$us->getApodo()." ha sido activado");
+        }
+        
+        return $this->render('usuario/index.html.twig', ['usuarios' => $usuarioRepository->findAll()]);
+    }
+
+    /**
+     * @Route("admin/usuario/{id}", name="usuario_delete", methods="DELETE")
      */
     public function delete(Request $request, Usuario $usuario): Response
     {

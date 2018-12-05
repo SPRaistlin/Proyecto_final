@@ -6,6 +6,7 @@ use App\Entity\Categoria;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class CategoriaType extends AbstractType
 {
@@ -13,7 +14,13 @@ class CategoriaType extends AbstractType
     {
         $builder
             ->add('nombre')
-            ->add('created')
+            ->add('is_menu', ChoiceType::class, 
+                array('choices' => array(                 
+                    'Yes' => '1',
+                    'No' => '0'   
+                )  
+            ))
+            //->add('created')
         ;
     }
 

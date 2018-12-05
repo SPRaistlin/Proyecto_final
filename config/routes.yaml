@@ -15,5 +15,12 @@ menu:
     controller:  App\Controller\CategoriaController:menuCategorias
     
 crear-receta:
-    path: /crear-receta
+    path: /crear-receta/
     controller: App\Controller\RecetaController:crearReceta
+
+    
+#Admin routes#    
+perfil-admin:
+    path: /admin/perfil/{user}
+    controller: App\Controller\UsuarioController::perfilUsuario
+

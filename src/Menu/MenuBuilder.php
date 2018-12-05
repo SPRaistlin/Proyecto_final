@@ -60,6 +60,7 @@ class MenuBuilder implements ContainerAwareInterface
               
         return $menu;
     }
+    
     public function createSidebarMenu()
     {
         $menu = $this->factory->createItem('root');
@@ -74,6 +75,26 @@ class MenuBuilder implements ContainerAwareInterface
             ]); 
 
         }
+
+        return $menu;
+    }
+    
+    public function createAdminMenu()
+    {
+        $menu = $this->factory->createItem('root');
+        
+        $menu->addChild('Usuarios');
+        $menu['Usuarios']->addChild('Ver Usuarios', ['route' => 'usuario_index']);
+        $menu['Usuarios']->addChild('Crear Usuarios', ['route' => 'usuario_new']);
+        
+        $menu->addChild('Categorías');
+        $menu['Categorías']->addChild('Ver Categorías', ['route' => 'categoria_index']);
+        $menu['Categorías']->addChild('Crear Categoria', ['route' => 'categoria_new']);
+        
+        $menu->addChild('Recetas');
+        $menu['Recetas']->addChild('Ver Recetas', ['route' => 'receta_index']);
+        $menu['Recetas']->addChild('Crear Receta', ['route' => 'receta_new']);
+        
 
         return $menu;
     }
