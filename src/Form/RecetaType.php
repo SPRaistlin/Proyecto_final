@@ -46,10 +46,9 @@ class RecetaType extends AbstractType
                         'placeholder' => $current,                   
                     )
                 ))*/
-               ->add('usuario', HiddenType::class,array(
+               ->add('usuario', HiddenType::class, array(
                     'attr' => array(
-                        'value' => $curid,
-                        'placeholder' => $current,
+                        'value' => $this->user->getId()
                     ))) 
                 ->add('categoria')
             ;

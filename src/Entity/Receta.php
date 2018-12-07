@@ -38,8 +38,8 @@ class Receta
     private $dificultad;
 
     /**
-     * @ORM\Column(type="integer")
-     * 
+     * @ORM\ManyToOne(targetEntity="App\Entity\Usuario", inversedBy="recetas")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $usuario;
 
@@ -107,12 +107,12 @@ class Receta
         return $this;
     }
 
-    public function getUsuario(): ?int
+    public function getUsuario(): ?Usuario
     {
         return $this->usuario;
     }
 
-    public function setUsuario(?int $usuario): self
+    public function setUsuario(?Usuario $usuario): self
     {
         $this->usuario = $usuario;
 
