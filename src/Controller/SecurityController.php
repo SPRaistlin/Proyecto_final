@@ -9,11 +9,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class SecurityController extends Controller
 {
     /**
-     * @Route("/login", name="login")
+     * @Route("/{_locale}/login", name="login", defaults={"_locale"="es"}))
+     * @Route({
+     *  "es": "/{_locale}/login",
+     *  "en": "/{_locale}/login"
+     }, name="login")
      */
     public function login(Request $request, AuthenticationUtils $utils)
     {
@@ -26,14 +33,23 @@ class SecurityController extends Controller
         ]);
     }
     /**
-     * @Route("/logout", name="logout")
+     * @Route("/logout", name="logout", defaults={"_locale"="es"})
+     * @Route({
+     *  "es": "/{_locale}/logout",
+     *  "en": "/{_locale}/logout"
+     }, name="logout")
      */
-    public function logout()
+    public function logout(Request $request, TokenStorageInterface $tokenStorage)
     {
-        $this->get("request")->getSession()->invalidate();
-        $this->get("security.context")->setToken(null);
+        $session = $request->getSession();
+        $session->invalidate();
+       $tokenStorage->setToken(null);
         $response = new Response();
         $response->headers->clearCookie('REMEMBERME');
         $response->send();
+        return $this->render('security/login.html.twig', [
+            'error' => null,
+            'last_username' => null
+        ]);
     }
 }

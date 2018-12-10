@@ -16,6 +16,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use App\Entity\Usuario;
+use Doctrine\ORM\EntityRepository;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class RecetaType extends AbstractType
 {
@@ -30,28 +32,31 @@ class RecetaType extends AbstractType
     {
         if ($this->user != 'admin') 
         {
-            $current = $this->user->getApodo();
-            $curid = $this->user->getId();            
-
-            print_r('current '.$current.'-'.$curid);
             $builder
                 ->add('nombre')
                 ->add('ingredientes')
                 ->add('preparacion')
                 ->add('dificultad')
-                //->add('created')
+                ->add('categoria')
+                //->add('created')/*
                 /*->add('usuario', TextType::class, array(
                     'attr' => array(
                         'value' => $curid,
                         'placeholder' => $current,                   
                     )
-                ))*/
+                ))
                ->add('usuario', HiddenType::class, array(
                     'attr' => array(
                         'value' => $this->user->getId()
-                    ))) 
-                ->add('categoria')
-            ;
+                    )))*/
+                ->add('usuario', EntityType::class, array(
+                    'class' => 'App:Usuario',
+                    'query_builder' => function (EntityRepository $er){
+                        return $er->createQueryBuilder('u')
+                            ->where('u.id ='.$this->user->getId().'');
+                    },
+                    'choice_label' => 'apodo',
+                ));    
         }
         else {
 
@@ -61,7 +66,7 @@ class RecetaType extends AbstractType
                 ->add('preparacion')
                 ->add('dificultad')
                 //->add('created')
-                ->add('usuario', HiddenType::class) 
+                ->add('usuario') 
                 ->add('categoria')
             ;
         }

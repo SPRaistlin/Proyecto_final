@@ -16,7 +16,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 class IndexController extends AbstractController
 {
     /**
-     * @Route("/index", name="index")
+     * @Route("/{_locale}/index", name="index", defaults={"_locale"="es"})
+     * @Route({
+     *  "es": "/",
+     *  "en": "/{_locale}/index"
+     }, name="index")
      */
     public function index()
     {

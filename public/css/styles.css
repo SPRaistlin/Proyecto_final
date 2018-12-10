@@ -1,6 +1,6 @@
 body {
     position: relative;
-    background: #efefee;
+    background: #ffffed;
     min-height: 45rem;
     padding-bottom: 80px;
 }
@@ -19,7 +19,7 @@ html {height:100%}
 }
 
 .space-brand {
-    color: #fff;
+    color: #000;
     font-weight: bold;
 }
 
@@ -240,7 +240,7 @@ html {height:100%}
 
 /*Mariano Edit*/
 a:not([href]):not([tabindex]){
-    color: #FFF !important;
+    color: #000 !important;
 }
 .example-wrapper { 
     margin: 1em auto; 

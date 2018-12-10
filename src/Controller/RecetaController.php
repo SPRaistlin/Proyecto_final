@@ -118,15 +118,17 @@ class RecetaController extends AbstractController
         $recetum = new Receta();
         $form = $this->createForm(RecetaType::class, $recetum);
         $form->handleRequest($request);
-
+        $ok;
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($recetum);
             $em->flush();
-
-            return $this->redirectToRoute('receta_index');
+            $this->addFlash("success","La receta se ha creado con éxito");
+            $ok = 1;
+            return $this->redirectToRoute('crearReceta', array(
+                'ok' => $ok
+            ));
         }
-
         return $this->render('receta/crearReceta.html.twig', [
             'recetum' => $recetum,
             'form' => $form->createView(),

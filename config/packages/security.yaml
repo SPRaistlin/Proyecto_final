@@ -49,6 +49,8 @@ security:
                 path: /logout
                 target: /login
                 invalidate_session: true
+                delete_cookies:
+                    REMEMBERME: { path: null, domain: null}
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false 
