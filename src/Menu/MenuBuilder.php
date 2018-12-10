@@ -46,35 +46,55 @@ class MenuBuilder implements ContainerAwareInterface
     {
         $menu = $this->factory->createItem('root');
         //$em = $this->em->getManager();
-        $categorias = $this->em->getRepository('App:Categoria')->findAll();
+        $categorias = $this->em->getRepository('App:Categoria')->findBy( array('is_menu' =>  1));
         $menu->addChild('', array('route' => 'index'))->setExtra('icon', 'fa-home');
         foreach ($categorias as $categoria)
         {
              $menu->addChild($categoria->getNombre(),[
                 'label' => $categoria->getNombre(),
-                'route' => 'mostrar_categoria',
+                'route' => 'menu',
                 'routeParameters' =>  array('nombre' => strtolower($categoria->getNombre()))
             ]); 
 
         }
-        /*$menu['Categorias']->addChild('Desayunos', ['route' => 'desayunos']);
-        $menu['Categorias']->addChild('Aperitivos', ['route' => 'aperitivos']);
-        $menu['Categorias']->addChild('Almuerzos', ['route' => 'almuerzos']);
-        $menu['Categorias']->addChild('Comidas', ['route' => 'comidas']);
-        $menu['Categorias']->addChild('Meriendas', ['route' => 'meriendas']);
-        $menu['Categorias']->addChild('Cenas', ['route' => 'cenas']);
-        $menu['Categorias']->addChild('Postres', ['route' => 'postres']);
-        $menu['Categorias']->addChild('Bebidas', ['route' => 'bebidas']);*/
-        
-       
+              
         return $menu;
     }
-     public function createSidebarMenu(RequestStack $requestStack)
+    
+    public function createSidebarMenu()
     {
-        $menu = $this->factory->createItem('sidebar');
-
+        $menu = $this->factory->createItem('root');
+        $categorias = $this->em->getRepository('App:Categoria')->findBy( array('is_menu' => 0));
         $menu->addChild('Home', ['route' => 'index']);
-        // ... add more children
+        foreach ($categorias as $categoria)
+        {
+             $menu->addChild($categoria->getNombre(),[
+                'label' => $categoria->getNombre(),
+                'route' => 'menu',
+                'routeParameters' =>  array('nombre' => strtolower($categoria->getNombre()))
+            ]); 
+
+        }
+
+        return $menu;
+    }
+    
+    public function createAdminMenu()
+    {
+        $menu = $this->factory->createItem('root');
+        
+        $menu->addChild('Usuarios');
+        $menu['Usuarios']->addChild('Ver Usuarios', ['route' => 'usuario_index']);
+        $menu['Usuarios']->addChild('Crear Usuarios', ['route' => 'usuario_new']);
+        
+        $menu->addChild('Categorías');
+        $menu['Categorías']->addChild('Ver Categorías', ['route' => 'categoria_index']);
+        $menu['Categorías']->addChild('Crear Categoria', ['route' => 'categoria_new']);
+        
+        $menu->addChild('Recetas');
+        $menu['Recetas']->addChild('Ver Recetas', ['route' => 'receta_index']);
+        $menu['Recetas']->addChild('Crear Receta', ['route' => 'receta_new']);
+        
 
         return $menu;
     }

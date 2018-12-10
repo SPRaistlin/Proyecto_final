@@ -9,12 +9,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
+use Symfony\Component\Security\Core\Security;
 
 class RecetaController extends AbstractController
 {
     /**
-     * @Route("/receta", name="receta_index", methods="GET")
+     * @Route("/admin/receta", name="receta_index", methods="GET")
      */
     public function index(RecetaRepository $recetaRepository): Response
     {
@@ -22,7 +22,7 @@ class RecetaController extends AbstractController
     }
 
     /**
-     * @Route("/receta/new", name="receta_new", methods="GET|POST")
+     * @Route("/admin/receta/new", name="receta_new", methods="GET|POST")
      */
     public function new(Request $request): Response
     {
@@ -45,7 +45,7 @@ class RecetaController extends AbstractController
     }
 
     /**
-     * @Route("/receta/{id}", name="receta_show", methods="GET")
+     * @Route("/admin/receta/{id}", name="receta_show", methods="GET")
      */
     public function show(Receta $recetum): Response
     {
@@ -53,7 +53,7 @@ class RecetaController extends AbstractController
     }
 
     /**
-     * @Route("/receta/{id}/edit", name="receta_edit", methods="GET|POST")
+     * @Route("/admin/receta/{id}/edit", name="receta_edit", methods="GET|POST")
      */
     public function edit(Request $request, Receta $recetum): Response
     {
@@ -73,7 +73,7 @@ class RecetaController extends AbstractController
     }
 
     /**
-     * @Route("/receta/{id}", name="receta_delete", methods="DELETE")
+     * @Route("/admin/receta/{id}", name="receta_delete", methods="DELETE")
      */
     public function delete(Request $request, Receta $recetum): Response
     {
@@ -108,5 +108,31 @@ class RecetaController extends AbstractController
             'categoria' => $nombre
             ]);
     }
-    
+    /** 
+     * @Route("/crear-receta", name="crearReceta", methods="GET|POST")
+     */
+    public function crearReceta(Request $request): Response
+    {
+        
+
+        $recetum = new Receta();
+        $form = $this->createForm(RecetaType::class, $recetum);
+        $form->handleRequest($request);
+        $ok;
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($recetum);
+            $em->flush();
+            $this->addFlash("success","La receta se ha creado con éxito");
+            $ok = 1;
+            return $this->redirectToRoute('crearReceta', array(
+                'ok' => $ok
+            ));
+        }
+        return $this->render('receta/crearReceta.html.twig', [
+            'recetum' => $recetum,
+            'form' => $form->createView(),
+        ]);
+    }
+        
 }

@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/base.html.twig' %}
 
 {% block title %}Usuario{% endblock %}
 
@@ -34,6 +34,15 @@
             <tr>
                 <th>Created</th>
                 <td>{{ usuario.created ? usuario.created|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Usuario Activo</th>
+            {% if usuario.isactive  %}
+                <td>Sí</td>
+            {% else %}
+                <td>No</td>
+            {% endif %}
+            </tr>
             </tr>
         </tbody>
     </table>

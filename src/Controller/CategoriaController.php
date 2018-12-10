@@ -21,7 +21,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 class CategoriaController extends AbstractController
 {
     /**
-     * @Route("/categoria", name="categoria_index", methods="GET")
+     * @Route("/admin/categoria", name="categoria_index", methods="GET")
      */
     public function index(CategoriaRepository $categoriaRepository): Response
     {
@@ -29,7 +29,7 @@ class CategoriaController extends AbstractController
     }
 
     /**
-     * @Route("/categoria/new", name="categoria_new", methods="GET|POST")
+     * @Route("/admin/categoria/new", name="categoria_new", methods="GET|POST")
      */
     public function new(Request $request): Response
     {
@@ -52,7 +52,7 @@ class CategoriaController extends AbstractController
     }
 
     /**
-     * @Route("/categoria/{id}", name="categoria_show", methods="GET")
+     * @Route("/admin/categoria/{id}", name="categoria_show", methods="GET")
      */
     public function show(Categoria $categorium): Response
     {
@@ -60,7 +60,7 @@ class CategoriaController extends AbstractController
     }
 
     /**
-     * @Route("/categoria/{id}/edit", name="categoria_edit", methods="GET|POST")
+     * @Route("/admin/categoria/{id}/edit", name="categoria_edit", methods="GET|POST")
      */
     public function edit(Request $request, Categoria $categorium): Response
     {
@@ -80,7 +80,7 @@ class CategoriaController extends AbstractController
     }
 
     /**
-     * @Route("/categoria/{id}", name="categoria_delete", methods="DELETE")
+     * @Route("/admin/categoria/{id}", name="categoria_delete", methods="DELETE")
      */
     public function delete(Request $request, Categoria $categorium): Response
     {
@@ -91,6 +91,17 @@ class CategoriaController extends AbstractController
         }
 
         return $this->redirectToRoute('categoria_index');
-    } 
+    }
     
+    /**
+     * Listado recetas por categoría
+     * @Route("/admin/recetas/{nombre}", name="menu", methods="GET")
+    */
+    public function menuCategorias(CategoriaRepository $recetaRepository, $nombre): Response
+    {
+
+        return $this->render('receta/listadofiltrado.html.twig', ['recetas' =>$recetaRepository->findBy(array('categoria' => $catid),array('categoria' => 'DESC')),
+            'categoria' => $nombre
+            ]);
+    }
 }

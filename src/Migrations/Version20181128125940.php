@@ -8,15 +8,14 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20181120135701 extends AbstractMigration
+final class Version20181128125940 extends AbstractMigration
 {
     public function up(Schema $schema) : void
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('DROP INDEX UNIQ_2265B05D7BA2F5EB ON usuario');
-        $this->addSql('ALTER TABLE usuario DROP api_token');
+        $this->addSql('ALTER TABLE categoria ADD is_menu TINYINT(1) NOT NULL');
     }
 
     public function down(Schema $schema) : void
@@ -24,7 +23,6 @@ final class Version20181120135701 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE usuario ADD api_token VARCHAR(255) NOT NULL COLLATE utf8mb4_unicode_ci');
-        $this->addSql('CREATE UNIQUE INDEX UNIQ_2265B05D7BA2F5EB ON usuario (api_token)');
+        $this->addSql('ALTER TABLE categoria DROP is_menu');
     }
 }

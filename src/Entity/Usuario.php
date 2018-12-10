@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UsuarioRepository")
@@ -15,7 +16,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @UniqueEntity(fields="email", message="Email already taken")
  * @UniqueEntity(fields="apodo", message="Username already taken")
  */
-class Usuario implements UserInterface, \Serializable
+class Usuario implements AdvancedUserInterface, \Serializable
 {
     /**
      * @ORM\Id()
@@ -61,10 +62,15 @@ class Usuario implements UserInterface, \Serializable
     private $created;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Receta", mappedBy="usuario")
+     * 
      */
     private $recetas;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isActive;
+        
     /**
      * @return string
      */
@@ -73,7 +79,7 @@ class Usuario implements UserInterface, \Serializable
     {
         return strval($this->apodo);
     }
-    
+       
     public function __construct()
     {
         $this->recetas = new ArrayCollection();
@@ -199,6 +205,18 @@ class Usuario implements UserInterface, \Serializable
         return $this;
     }
     
+    public function getIsActive(): ?bool
+    {
+        return $this->isActive;
+    }
+
+    public function setIsActive(int $isActive): self
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+    
     /**
     * @ORM\PrePersist
     */
@@ -230,7 +248,25 @@ class Usuario implements UserInterface, \Serializable
     {
         $this->plainPassword = null;
     }
-    
+    public function isAccountNonExpired()
+    {
+        return true;
+    }
+
+    public function isAccountNonLocked()
+    {
+        return true;
+    }
+
+    public function isCredentialsNonExpired()
+    {
+        return true;
+    }
+
+    public function isEnabled()
+    {
+        return $this->isActive;
+    }
     /** @see \Serializable::serialize() */
     public function serialize()
     {
@@ -238,7 +274,8 @@ class Usuario implements UserInterface, \Serializable
             $this->id,
             $this->apodo,
             $this->email,
-            $this->pass
+            $this->pass,
+            $this->isActive
         ]);
     }
     
@@ -249,7 +286,10 @@ class Usuario implements UserInterface, \Serializable
             $this->id,
             $this->apodo,
             $this->email,
-            $this->pass                
+            $this->pass,
+            $this->isActive
             ) = unserialize($string, ['allowed_classes' => false]);
     }
+    
+
 }

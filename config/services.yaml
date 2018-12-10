@@ -4,7 +4,8 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    locale: 'en'
+    locale: 'es'
+    translatior_fallbacks: [​'es'​, ​'en' ]
 
 services:
     # default configuration for services in *this* file
@@ -37,6 +38,7 @@ services:
         tags:
            - { name: knp_menu.menu_builder, method: createMainMenu, alias: main } 
            - { name: knp_menu.menu_builder, method: createSidebarMenu, alias: sidebar }
+           - { name: knp_menu.menu_builder, method: createAdminMenu, alias: sidebar-admin }
            
     app.menu.main:
         class: Knp\Menu\MenuItem 
@@ -52,3 +54,7 @@ services:
         tags:
             - { name: knp_menu.menu, alias: sidebar } 
             
+    App\Controller\CustomExceptionController:
+        public: true
+        arguments:
+            $debug: '%kernel.debug%'        

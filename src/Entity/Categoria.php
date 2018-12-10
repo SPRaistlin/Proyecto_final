@@ -35,6 +35,11 @@ class Categoria
     private $recetas;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $is_menu;
+
+    /**
      * @return string
      */
      public function __toString()
@@ -113,5 +118,17 @@ class Categoria
     */
     public function setCreatedValue() {
         $this->created = new \DateTime();
+    }
+
+    public function getIsMenu(): ?bool
+    {
+        return $this->is_menu;
+    }
+
+    public function setIsMenu(bool $is_menu): self
+    {
+        $this->is_menu = $is_menu;
+
+        return $this;
     }    
 }

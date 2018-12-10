@@ -1,10 +1,18 @@
-{% extends 'base.html.twig' %}
-
+{% extends 'admin/base.html.twig' %}
 {% block title %}Usuario index{% endblock %}
 
 {% block body %}
     <h1>Usuario index</h1>
-
+{% for flash_message in app.session.flashBag.get('success') %}
+    <div class="alert alert-success">
+        {{ flash_message }}
+    </div>
+{% endfor %}
+{% for flash_message in app.session.flashBag.get('error') %}
+    <div class="alert alert-danger">
+        {{ flash_message }}
+    </div>
+{% endfor %}
     <table class="table">
         <thead>
             <tr>
@@ -12,7 +20,6 @@
                 <th>Nombre</th>
                 <th>Apellidos</th>
                 <th>Email</th>
-                <th>Pass</th>
                 <th>Apodo</th>
                 <th>Created</th>
                 <th>actions</th>
@@ -25,12 +32,12 @@
                 <td>{{ usuario.Nombre }}</td>
                 <td>{{ usuario.Apellidos }}</td>
                 <td>{{ usuario.email }}</td>
-                <td>{{ usuario.pass }}</td>
                 <td>{{ usuario.apodo }}</td>
                 <td>{{ usuario.created ? usuario.created|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
                     <a href="{{ path('usuario_show', {'id': usuario.id}) }}">show</a>
                     <a href="{{ path('usuario_edit', {'id': usuario.id}) }}">edit</a>
+                    <a href="{{ path('usuario_actdesact', {'id': usuario.id}) }}">Activar/Desactivar</a>
                 </td>
             </tr>
         {% else %}

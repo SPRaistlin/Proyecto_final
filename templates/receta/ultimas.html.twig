@@ -8,7 +8,7 @@
                     <p>{{ receta.ingredientes }}</p>
                     <p>{{ receta.preparacion }}</p>
                     <p>{{ receta.dificultad }}</p>
-                    <p>Creado en la categoría <a href="{{ path( 'mostrar_categoria', {'nombre' : receta.categoria|lower } )}}"><span style="color:blue">{{ receta.categoria }}</span></a> por el usuario <span style="color: pink">{{ receta.usuario }}</span></p>
+                    <p>Creado en la categoría <a href="{{ path( 'mostrar_categoria', {'nombre' : receta.categoria|lower} )}}"><span style="color:blue">{{ receta.categoria }}</span></a> por el usuario <span style="color: pink">{{ receta.usuario }}</span></p>
                 {% else %}
                      <div class="well">No se han encontrado recetas</div>
             {% endfor %}  

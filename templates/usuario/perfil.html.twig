@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edita tus datos{% endblock %}
+
+{% block body %}
+    <h1>Edit Usuario</h1>
+{% if app.request.get("change") == 'ok' %}
+    <div class="alert alert-success">
+     <strong>Enhorabuena!</strong> tus datos han sido modificados.
+    </div>
+{% elseif app.request.get("change") == 'ko'  %}
+    <div class="alert alert-danger">
+     <strong>Fatality!</strong> tus datos no se han podido modificar, por favor inténtalo de nuevo.
+    </div> 
+{% endif %}
+    {{ include('usuario/_form.html.twig', {'button_label': 'Update'}) }}
+
+{% endblock %}

@@ -27,14 +27,11 @@
                    <!--div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink"-->
                     <a class="navbar-brand space-brand dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" id="navbarDropdown" aria-haspopup="true" aria-expanded="false">  
                         <img class="nav-profile-img rounded-circle" src="{{asset('images/runner.png')}}">
-                        <span>{{ app.user.apodo }}</span>
+                        <span>{{ app.user }}</span>
                     </a>
                     <ul class="dropdown-menu menu_level_1">
                         <li class="nav-item dropdown">
-                            <a class="dropdown-item" href="{{ path('perfil',{ 'apodo' : app.user.apodo }) }}">{{ 'Perfil'| trans }}</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="dropdown-item" href="{{ path('crear-receta') }}" method="post">{{ 'Crear Receta'| trans }}</a>
+                            <a class="dropdown-item" href="{{ path('perfil-admin',{'user' : app.user.username }) }}">{{ 'Perfil'| trans }}</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="dropdown-item" href="{{ path('logout') }}">{{ 'Salir'| trans }}</a>
@@ -44,33 +41,30 @@
                 </li>    
             {% else %}
                 <li class="nav-item" style="margin-right: 15px;">      
-                    <a style="margin-left: 15px" class="navbar-brand space-brand" href="{{ path('registro') }}"> {{ 'Registro'| trans }}</a>
-                </li> 
-                <li class="nav-item" style="margin-right: 15px;">      
-                    <a style="margin-left: 15px" class="navbar-brand space-brand" href="{{ path('login') }}"> {{ 'Iniciar sesión'| trans }}</a>
+                    <a style="margin-left: 15px" class="navbar-brand space-brand" href="{{ path('login') }}"> {{ 'LogIn'| trans }}</a>
                 </li>    
             {% endif %}
         </ul>    
     </nav>
      <div class="container">
          <div class="row">
+            {% block sidebar %}
+            <div id="sidebar" class="col-xs-6 col-md-4"> 
+                {{ include('admin/sidebarcontent.html.twig') }}
+                {{ knp_menu_render('sidebar-admin',{'template':'sidebar.html.twig'} ) }}
+            </div>
+            {% endblock %}
              <div class="col-xs-12 col-md-8">
                 {% block body %}
                     <br>
                 {% endblock %}
              </div>
-        {% block sidebar %}
-            <div id="sidebar" class="col-xs-6 col-md-4"> 
-                {{ include('sidebarcontent.html.twig') }}
-                {{ knp_menu_render('sidebar',{'template':'sidebar.html.twig'} ) }}
-            </div>
-        {% endblock %}
         </div>
     </div>
 <footer class="footer">
     <div class="container text-center">
         <!-- Texto del footer -->
-        <span class="text-muted">Mi página de recetas <i class="fa fa-heart" style="color: red;"></i> realizada con Symfony4 <a href="#">Mariano Sánchez</a></span>
+        <span class="text-muted">Mi página de deportes <i class="fa fa-heart" style="color: red;"></i> realizada con Symfony4 <a href="#">ImaginaFormacion</a></span>
 
     </div>
 </footer>
