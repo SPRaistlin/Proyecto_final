@@ -36,7 +36,7 @@ class Usuario implements AdvancedUserInterface, \Serializable
     private $Apellidos;
 
     /**
-     * @ORM\Column(type="string", length=250)
+     * @ORM\Column(type="string", length=250, unique=true)
      */
     private $email;
     
@@ -52,7 +52,7 @@ class Usuario implements AdvancedUserInterface, \Serializable
     private $pass;
 
     /**
-     * @ORM\Column(type="string", length=20, nullable=true)
+     * @ORM\Column(type="string", length=20)
      */
     private $apodo;
 
@@ -70,7 +70,13 @@ class Usuario implements AdvancedUserInterface, \Serializable
      * @ORM\Column(type="boolean")
      */
     private $isActive;
-        
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Comentario", mappedBy="usuario_id", orphanRemoval=true)
+     */
+    private $comentarios;
+
+       
     /**
      * @return string
      */
@@ -83,6 +89,7 @@ class Usuario implements AdvancedUserInterface, \Serializable
     public function __construct()
     {
         $this->recetas = new ArrayCollection();
+        $this->comentarios = new ArrayCollection();
         //$this->roles = array('ROLE_USER');
     }
 
@@ -290,6 +297,38 @@ class Usuario implements AdvancedUserInterface, \Serializable
             $this->isActive
             ) = unserialize($string, ['allowed_classes' => false]);
     }
+
+    /**
+     * @return Collection|Comentario[]
+     */
+    public function getComentarios(): Collection
+    {
+        return $this->comentarios;
+    }
+
+    public function addComentario(Comentario $comentario): self
+    {
+        if (!$this->comentarios->contains($comentario)) {
+            $this->comentarios[] = $comentario;
+            $comentario->setUsuarioId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComentario(Comentario $comentario): self
+    {
+        if ($this->comentarios->contains($comentario)) {
+            $this->comentarios->removeElement($comentario);
+            // set the owning side to null (unless already changed)
+            if ($comentario->getUsuarioId() === $this) {
+                $comentario->setUsuarioId(null);
+            }
+        }
+
+        return $this;
+    }
+
     
 
 }

@@ -12,7 +12,11 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class RegistrationController extends AbstractController
 {
     /**
-     * @Route("/registro", name="registration")
+     * @Route("/{_locale}/registro", name="registration")
+     * @Route({
+     *  "es": "/{_locale}/registro",
+     *  "en": "/{_locale}/register"
+     }, name="login")
      */
  public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {

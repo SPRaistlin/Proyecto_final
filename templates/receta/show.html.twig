@@ -35,6 +35,14 @@
                 <th>Created</th>
                 <td>{{ recetum.created ? recetum.created|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
+            {% if recetum.ruta  %}
+                <tr>
+                    <th>Imagen destacada</th>
+                    <td>                
+                        <img src="/{{ recetum.path }}/{{ recetum.ruta }}" alt="{{ recetum.nombre }}" title="{{ recetum.nombre }}">
+                    </td>
+                </tr>
+            {% endif %}
         </tbody>
     </table>
 

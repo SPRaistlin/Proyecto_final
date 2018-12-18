@@ -6,7 +6,10 @@
     <div class="content">
     {% block content %}
             {% for receta in recetas %}
-                 <p>{{ receta.nombre }}</p>
+                 <p><a href="{{ path('mostrar_receta', {'nombre' : receta.categoria|lower , 'slug' : receta.slug|lower}) }}" class="title">{{ receta.nombre }}</a></p>
+                {% if receta.ruta  %}
+                    <img src="/{{ receta.path }}/{{ receta.ruta }}" alt="{{ receta.nombre }}" title="{{ receta.nombre }}">
+                {% endif %}  
                     <p>{{ receta.ingredientes }}</p>
                     <p>{{ receta.preparacion }}</p>
                     <p>{{ receta.dificultad }}</p>

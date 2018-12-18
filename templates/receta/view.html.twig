@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Receta{% endblock %}
+
+{% block body %}
+    <h1>Receta</h1>
+    {% for recetum in recetas %}
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ recetum.id }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ recetum.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Ingredientes</th>
+                <td>{{ recetum.ingredientes }}</td>
+            </tr>
+            <tr>
+                <th>Preparacion</th>
+                <td>{{ recetum.preparacion }}</td>
+            </tr>
+            <tr>
+                <th>Dificultad</th>
+                <td>{{ recetum.dificultad }}</td>
+            </tr>
+            <tr>
+                <th>Categoria</th>
+                <td>{{ recetum.categoria }}</td>
+            </tr>
+        {% if recetum.ruta  %}
+            <tr>
+                <th>Imagen destacada</th>
+                <td>                
+                    <img src="/{{ recetum.path }}/{{ recetum.ruta }}" alt="{{ recetum.nombre }}" title="{{ recetum.nombre }}">
+                </td>
+            </tr>
+        {% endif %}   
+        </tbody>
+    </table>
+    {% else %}
+    <tr>
+        <td colspan="7">no records found</td>
+    </tr>
+{% endfor %}
+    <h1>Comentarios</h1>
+{% for coments in comentarios %}
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ coments.comentario }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ coments.usuarioid }}</td>
+            </tr>
+        </tbody>
+    </table>
+{% else %}
+    <tr>
+        <td colspan="7">no records found</td>
+    </tr>
+{% endfor %}
+{% endblock %}

@@ -19,6 +19,10 @@ use App\Entity\Usuario;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
+use App\Entity\Foto;
+use Doctrine\ORM\FotoRepository;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+
 class RecetaType extends AbstractType
 {
     private $user;
@@ -38,6 +42,7 @@ class RecetaType extends AbstractType
                 ->add('preparacion')
                 ->add('dificultad')
                 ->add('categoria')
+                ->add('slug')
                 //->add('created')/*
                 /*->add('usuario', TextType::class, array(
                     'attr' => array(
@@ -56,7 +61,12 @@ class RecetaType extends AbstractType
                             ->where('u.id ='.$this->user->getId().'');
                     },
                     'choice_label' => 'apodo',
-                ));    
+                ))
+                ->add('ruta', FileType::class, array(
+                    'label' => 'Imagen destacada',
+                    'required' => false
+                ))
+                ;    
         }
         else {
 
@@ -68,6 +78,14 @@ class RecetaType extends AbstractType
                 //->add('created')
                 ->add('usuario') 
                 ->add('categoria')
+                ->add('nombreimagen', TextType::class, array(
+                    'label' => 'Título de la imagen',
+                    'required' => false
+                ))
+                ->add('ruta', FileType::class, array(
+                    'label' => 'Imagen destacada',
+                    'required' => false
+                ))
             ;
         }
     }

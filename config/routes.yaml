@@ -14,13 +14,15 @@ registro:
     requirements:
         _locale: es|en
 
+
 mostrar_categoria:
-    path: /{_locale}/recetas/{nombre}
+    path: /{_locale}/{nombre}
     controller:  App\Controller\RecetaController:listadoRecetas
     requirements:
         _locale: es|en   
+
 menu:
-    path: /{_locale}/recetas/{nombre}
+    path: /{_locale}/{nombre}
     controller:  App\Controller\CategoriaController:menuCategorias
     requirements:
         _locale: es|en
@@ -30,6 +32,12 @@ crear-receta:
     controller: App\Controller\RecetaController:crearReceta
     requirements:
         _locale: es|en
+
+mostrar_receta:
+    path: /{_locale}/{nombre}/{slug}
+    controller:  App\Controller\RecetaController:mostrarRecetas
+    requirements:
+        _locale: es|en  
     
 #Admin routes#    
 perfil-admin:

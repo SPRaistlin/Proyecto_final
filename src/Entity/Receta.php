@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -53,6 +55,39 @@ class Receta
      * @ORM\Column(type="datetime")
      */
     private $created;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Comentario", mappedBy="receta_id")
+     */
+    private $comentarios;
+
+    /**
+     * @ORM\Column(type="string", length=250, unique=true)
+     */
+    private $slug;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Foto", mappedBy="receta_id", orphanRemoval=true)
+     */
+    private $fotos;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $path;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $ruta;
+
+
+    public function __construct()
+    {
+        $this->comentarios = new ArrayCollection();
+        $this->fotos = new ArrayCollection();
+    }
+
 
     public function getId(): ?int
     {
@@ -150,4 +185,102 @@ class Receta
         $this->created = new \DateTime();
     }
 
+    /**
+     * @return Collection|Comentario[]
+     */
+    public function getComentarios(): Collection
+    {
+        return $this->comentarios;
+    }
+
+    public function addComentario(Comentario $comentario): self
+    {
+        if (!$this->comentarios->contains($comentario)) {
+            $this->comentarios[] = $comentario;
+            $comentario->setRecetaId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComentario(Comentario $comentario): self
+    {
+        if ($this->comentarios->contains($comentario)) {
+            $this->comentarios->removeElement($comentario);
+            // set the owning side to null (unless already changed)
+            if ($comentario->getRecetaId() === $this) {
+                $comentario->setRecetaId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Foto[]
+     */
+    public function getFotos(): Collection
+    {
+        return $this->fotos;
+    }
+
+    public function addFoto(Foto $foto): self
+    {
+        if (!$this->fotos->contains($foto)) {
+            $this->fotos[] = $foto;
+            $foto->setRecetaId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFoto(Foto $foto): self
+    {
+        if ($this->fotos->contains($foto)) {
+            $this->fotos->removeElement($foto);
+            // set the owning side to null (unless already changed)
+            if ($foto->getRecetaId() === $this) {
+                $foto->setRecetaId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    //Obtenemo la ruta
+    public function getPath(): ?string
+    {
+        return $this->path;
+    }
+
+    public function setPath(string $path)
+    {
+        $this->path = $path;
+
+        return $this;
+    }
+
+    public function getRuta(): ?string
+    {
+        return $this->ruta;
+    }
+
+    public function setRuta(string $ruta)
+    {
+        $this->ruta = $ruta;
+
+        return $this;
+    }
 }

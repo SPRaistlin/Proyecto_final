@@ -95,7 +95,8 @@ class CategoriaController extends AbstractController
     
     /**
      * Listado recetas por categoría
-     * @Route("/admin/recetas/{nombre}", name="menu", methods="GET")
+     * @Route("/admin/{id}", name="menu", methods="GET")
+     * @ParamConverter("nombre", class="SensioBlogBundle:Post")
     */
     public function menuCategorias(CategoriaRepository $recetaRepository, $nombre): Response
     {
