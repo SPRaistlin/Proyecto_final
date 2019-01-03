@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{% block title %}Inicio{% endblock %}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    {% block stylesheets %}
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+        <!-- AÑADIR CSS DEL PROYECTO -->
+        <link rel="stylesheet" href="/css/font-awesome.css">
+        <link rel="stylesheet" href="/css/styles.css">
+    {% endblock %}
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-bg mb-5">
+        <a class="logoleft navbar-brand space-brand" href="{{ path('index') }}">Recetas al tún tún</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    {% block navigation %} 
+         {#knp_menu_render('main',{'template':'menu.html.twig','allow_safe_labels': true})#}
+         {{ knp_menu_render('main',{'template':'menu.html.twig'} ) }}
+    {% endblock %}  
+        <ul class="navbar-nav ml-auto">
+           {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                 <li class="nav-item dropdown" style="margin-right: 5px;">   
+                   <!--div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink"-->
+                    <a class="navbar-brand space-brand dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" id="navbarDropdown" aria-haspopup="true" aria-expanded="false">  
+                        <img class="nav-profile-img rounded-circle" src="{{asset('images/runner.png')}}">
+                        <span>{{ app.user.username }}</span>
+                    </a>
+                    <ul class="dropdown-menu menu_level_1">
+                        <li class="nav-item dropdown">
+                            <a class="dropdown-item" href="{{ path('perfil',{ 'usuario' : app.user.username }) }}">{{ 'Perfil'| trans }}</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="dropdown-item" href="{{ path('crear-receta') }}" method="post">{{ 'Crear Receta'| trans }}</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="dropdown-item" href="{{ path('logout') }}">{{ 'Salir'| trans }}</a>
+                        </li>
+                    </ul>    
+                    <!--/div-->
+                </li>    
+            {% else %}
+                <li class="nav-item" style="margin-right: 15px;">      
+                    <a style="margin-left: 15px" class="navbar-brand space-brand" href="{{ path('registro') }}"> {{ 'Registro'| trans }}</a>
+                </li> 
+                <li class="nav-item" style="margin-right: 15px;">      
+                    <a style="margin-left: 15px" class="navbar-brand space-brand" href="{{ path('login') }}"> {{ 'Iniciar sesión'| trans }}</a>
+                </li>    
+            {% endif %}
+        </ul>    
+    </nav>
+     <div class="container">
+         <div class="row">
+            {% block sidebar %}
+                <div id="sidebar" class="col-xs-4 col-md-3"> 
+                    {{ include('usuario/sidebarLeftContent.html.twig') }}
+                    
+                </div>
+            {% endblock %}
+            <div class="col-xs-12 col-md-9">
+                {% block body %}
+                        <br>
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+<footer class="footer">
+    <div class="container text-center">
+        <!-- Texto del footer -->
+        <span class="text-muted">Mi página de recetas <i class="fa fa-heart" style="color: red;"></i> realizada con Symfony4 <a href="#">Mariano Sánchez</a></span>
+
+    </div>
+</footer>
+{% block javascripts %}
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+<script>
+    $( document ).ready(function() 
+    {
+        $('#buscar').click( function()
+        {
+            
+            var busqueda = $('#busqueda').val();
+            var expr = new RegExp(/^[A-Za-z0-9\s]+$/g);
+            var res = expr.test(busqueda);
+            var locale = $('#locale').val();
+
+            if(res)
+            {
+                var path = "/"+locale+"/buscador/q="+busqueda;
+                $.ajax({
+                    method: "GET",
+                    url: path,
+                    async: true,
+                    success: function(data)
+                    {
+                        location.href = path
+                    }
+
+                });    
+            } else {
+                return;
+            }    
+
+            
+        })
+    });
+</script>
+<script>
+    $('.dropdown-toggle').dropdown();
+</script>
+{% endblock %}

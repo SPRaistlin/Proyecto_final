@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Crear Foto{% endblock %}
+
+{% block body %}
+{% for flash_message in app.session.flashBag.get('success') %}
+    <div class="alert alert-success">
+        {{ flash_message }}
+    </div>
+{% endfor %}
+{% for flash_message in app.session.flashBag.get('error') %}
+    <div class="alert alert-danger">
+        {{ flash_message }}
+    </div>
+{% endfor %}	
+    <h1>Crear un carrusel</h1>
+    <p>Puedes subir un máximo de 10 fotos</p>
+    {{ app.request.get('ric') }}
+    {{ include('foto/_form.html.twig') }}
+
+    <a href="{{ path('foto_index') }}">back to list</a>
+
+{% endblock %}

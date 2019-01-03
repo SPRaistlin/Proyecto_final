@@ -269,3 +269,12 @@ a:not([href]):not([tabindex]){
 ul.navbar-nav.ml-auto.marginright{
     margin-right: 10%;
 }
+
+caption {
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+    color: #868e96;
+    text-align: right !important;
+    caption-side: top !important;
+}
+

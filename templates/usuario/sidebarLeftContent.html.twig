@@ -1,0 +1,16 @@
+<div class="sidebar-content">
+	<div class="block block-account">
+		<div class="block-title">
+			<h3>Mi cuenta</h3>
+		</div>
+		<div class="block block-content">
+			<ul>
+				<li><a href="{{ path('perfil',{ 'usuario' : app.user.username }) }}">Panel de control de la cuenta</a></li>
+				<li><a href="{{ path('editarPerfil', {'usuario' : app.user.username}) }}">Información de la cuenta</a></li>
+				<li><a href="{{ path('mis-recetas', {'usuario': app.user.username}) }}">Mis Recetas</a></li>
+				<li><a href="{{ path('mis-comentarios', {'usuario': app.user.username}) }}">Mis Comentarios</a></li>
+			<ul>
+		</div>
+	</div>
+</div>
+

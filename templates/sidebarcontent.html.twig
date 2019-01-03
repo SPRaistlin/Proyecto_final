@@ -1,5 +1,15 @@
 <p>Hola</p>
+
         <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Buscar" aria-label="Buscar">
-            <button class="btn btn-info my-2 my-sm-0" type="submit">Buscar</button>
+            <input class="form-control mr-sm-2" type="text" placeholder="Buscar receta"  id="busqueda">
+            <input type="hidden" name="locale" id="locale" value="{{ app.request.locale }}"/>
+            <button class="btn btn-info my-2 my-sm-0" type="button" id="buscar">Buscar</button>
         </form> 
+	<div class="block block-menu">
+		<div class="block-title">
+			<h3>Menú</h3>
+		</div>
+		<div class="block block-content">
+			{{ knp_menu_render('sidebar',{'template':'sidebar.html.twig'} ) }}
+		</div>
+	</div>

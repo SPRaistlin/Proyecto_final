@@ -13,7 +13,7 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark navbar-bg mb-5">
-        <a class="logoleft navbar-brand space-brand" href="#">Recetas al tún tún</a>
+        <a class="logoleft navbar-brand space-brand" href="{{ path('index') }}">Recetas al tún tún</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -25,13 +25,13 @@
            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                  <li class="nav-item dropdown" style="margin-right: 5px;">   
                    <!--div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink"-->
-                    <a class="navbar-brand space-brand dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" id="navbarDropdown" aria-haspopup="true" aria-expanded="false">  
+                    <a class="navbar-brand space-brand dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" id="navbarDropdown" aria-haspopup="true" aria-expanded="false">  
                         <img class="nav-profile-img rounded-circle" src="{{asset('images/runner.png')}}">
-                        <span>{{ app.user.apodo }}</span>
+                        <span>{{ app.user.username }}</span>
                     </a>
                     <ul class="dropdown-menu menu_level_1">
                         <li class="nav-item dropdown">
-                            <a class="dropdown-item" href="{{ path('perfil',{ 'apodo' : app.user.apodo }) }}">{{ 'Perfil'| trans }}</a>
+                            <a class="dropdown-item" href="{{ path('perfil',{ 'usuario' : app.user.username }) }}">{{ 'Perfil'| trans }}</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="dropdown-item" href="{{ path('crear-receta') }}" method="post">{{ 'Crear Receta'| trans }}</a>
@@ -62,7 +62,7 @@
         {% block sidebar %}
             <div id="sidebar" class="col-xs-6 col-md-4"> 
                 {{ include('sidebarcontent.html.twig') }}
-                {{ knp_menu_render('sidebar',{'template':'sidebar.html.twig'} ) }}
+                {# knp_menu_render('sidebar',{'template':'sidebar.html.twig'} ) #}
             </div>
         {% endblock %}
         </div>
@@ -78,6 +78,38 @@
 <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+<script>
+    $( document ).ready(function() 
+    {
+        $('#buscar').click( function()
+        {
+            
+            var busqueda = $('#busqueda').val();
+            var expr = new RegExp(/^[A-Za-z0-9\s]+$/g);
+            var res = expr.test(busqueda);
+            var locale = $('#locale').val();
+
+            if(res)
+            {
+                var path = "/"+locale+"/buscador/q="+busqueda;
+                $.ajax({
+                    method: "GET",
+                    url: path,
+                    async: true,
+                    success: function(data)
+                    {
+                        location.href = path
+                    }
+
+                });    
+            } else {
+                return;
+            }    
+
+            
+        })
+    });
+</script>
 <script>
     $('.dropdown-toggle').dropdown();
 </script>

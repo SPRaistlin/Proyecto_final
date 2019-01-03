@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -66,11 +68,7 @@ class Receta
      */
     private $slug;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Foto", mappedBy="receta_id", orphanRemoval=true)
-     */
-    private $fotos;
-
+ 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
@@ -81,11 +79,16 @@ class Receta
      */
     private $ruta;
 
+    /**
+     * 
+     */
+    private $imgs = [];
+
 
     public function __construct()
     {
         $this->comentarios = new ArrayCollection();
-        $this->fotos = new ArrayCollection();
+
     }
 
 
@@ -228,37 +231,7 @@ class Receta
         return $this;
     }
 
-    /**
-     * @return Collection|Foto[]
-     */
-    public function getFotos(): Collection
-    {
-        return $this->fotos;
-    }
-
-    public function addFoto(Foto $foto): self
-    {
-        if (!$this->fotos->contains($foto)) {
-            $this->fotos[] = $foto;
-            $foto->setRecetaId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeFoto(Foto $foto): self
-    {
-        if ($this->fotos->contains($foto)) {
-            $this->fotos->removeElement($foto);
-            // set the owning side to null (unless already changed)
-            if ($foto->getRecetaId() === $this) {
-                $foto->setRecetaId(null);
-            }
-        }
-
-        return $this;
-    }
-
+    
     //Obtenemo la ruta
     public function getPath(): ?string
     {
@@ -283,4 +256,18 @@ class Receta
 
         return $this;
     }
+
+    public function getImgs(): ?array
+    {
+        return $this->imgs;
+    }
+
+    public function setImgs(?array $imgs): self
+    {
+        $this->imgs = $imgs;
+
+        return $this;
+    }
+
+
 }

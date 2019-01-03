@@ -1,0 +1,56 @@
+
+{% block body %}
+    <h2>Últimas Recetas</h2>
+{% if app.request.get("change") == 'ok' %}
+    <div class="alert alert-success">
+     <strong>Enhorabuena!</strong> tus datos han sido modificados.
+    </div>
+{% elseif app.request.get("change") == 'ko'  %}
+    <div class="alert alert-danger">
+     <strong>Fatality!</strong> tus datos no se han podido modificar, te jodes.
+    </div> 
+{% endif %}
+<table>
+	<caption align="top"><a href="{{ path('mis-recetas', {'usuario': app.user.username}) }}">Ver todos</a></caption>
+	<tr>
+		<th>Nombre</th>
+		<th>Imagen</th>
+		<th>Ingredientes</th>
+		<th>Preparación</th>
+		<th>Dificultad</th>
+		<th>Categoría</th>
+        <th>Publicada el</th>
+	</tr>
+   {% for receta in recetas %}
+   	<tr>
+   		<td>
+                 <p><a href="{{ path('mostrar_receta', {'nombre' : receta.categoria|lower , 'slug' : receta.slug|lower}) }}" class="title">{{ receta.nombre }}</a></p>
+        </td>
+        <td>
+        {% if receta.ruta  %}
+    		<img src="/{{ receta.path }}/{{ receta.ruta }}" alt="{{ receta.nombre }}" title="{{ receta.nombre }}">  
+        {% endif %}
+        </td>
+        <td>          
+                    <p>{{ receta.ingredientes }}</p>
+        </td>
+        <td>
+                    <p>{{ receta.preparacion }}</p>
+        </td>
+        <td>
+                    <p>{{ receta.dificultad }}</p>
+        </td>
+        <td>
+                    <p>{{ receta.categoria }}</p>
+        </td>
+        <td>
+                    <p>{{ receta.created|date }}</p>
+        </td>              
+                {% else %}
+                	<td>
+                     	<div class="well">No se han encontrado recetas</div>
+                 	</td>
+    </tr>
+   {% endfor %}  
+</table>
+{% endblock %}

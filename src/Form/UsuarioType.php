@@ -23,16 +23,16 @@ class UsuarioType extends AbstractType
             ->add('email', EmailType::class)
             ->add('plainPassword', RepeatedType::class, array(
                 'type' => PasswordType::class,
-                'first_options'  => array('label' => 'Password'),
-                'second_options' => array('label' => 'Repeat Password'),
+                'first_options'  => array('label' => 'Password', 'attr' => array('class' =>'dspl')),
+                'second_options' => array('label' => 'Repeat Password', 'attr' => array('class' =>'dspl'))
             ))
-            ->add('apodo', TextType::class)
-            ->add('isactive', ChoiceType::class, 
+            //->add('apodo', TextType::class)
+            /*->add('isactive', ChoiceType::class, 
                 array('choices' => array(                 
                     'Yes' => '1',
                     'No' => '0'   
                 )  
-            ))
+            ))*/
             //->add('created')
         ;
     }

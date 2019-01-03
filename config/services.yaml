@@ -58,3 +58,6 @@ services:
         public: true
         arguments:
             $debug: '%kernel.debug%'        
+
+    App\Entity\Usuario:
+        autowire: true        

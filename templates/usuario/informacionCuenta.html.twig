@@ -1,0 +1,10 @@
+{% extends 'usuario/baseColumnLeft.html.twig' %}
+
+{% block title %}Usuario{% endblock %}
+
+{% block body %}
+    <h1>Información de mi Cuenta</h1>
+ {{ include('usuario/_form.html.twig', {'button_label': 'Update'}) }}
+
+
+{% endblock %}

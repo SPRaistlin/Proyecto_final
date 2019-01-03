@@ -18,9 +18,6 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use App\Entity\Usuario;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-
-use App\Entity\Foto;
-use Doctrine\ORM\FotoRepository;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class RecetaType extends AbstractType
@@ -40,9 +37,15 @@ class RecetaType extends AbstractType
                 ->add('nombre')
                 ->add('ingredientes')
                 ->add('preparacion')
-                ->add('dificultad')
+                ->add('dificultad', ChoiceType::class, array(
+                    'choices'=> array(
+                        'Fácil' => 'Fácil',
+                        'Media' => 'Media',
+                        'Difícil' => 'Difícil'
+                    )
+                ))
                 ->add('categoria')
-                ->add('slug')
+                //->add('slug')
                 //->add('created')/*
                 /*->add('usuario', TextType::class, array(
                     'attr' => array(
@@ -60,13 +63,24 @@ class RecetaType extends AbstractType
                         return $er->createQueryBuilder('u')
                             ->where('u.id ='.$this->user->getId().'');
                     },
-                    'choice_label' => 'apodo',
+                     'attr' => array(
+                        'class' => 'hidden',
+                        'hidden' => true
+                    ),
+                     'label' => false
+
                 ))
                 ->add('ruta', FileType::class, array(
                     'label' => 'Imagen destacada',
                     'required' => false
                 ))
-                ;    
+                ->add('imgs', FileType::class, array(
+                    'label' => 'Fotos de la receta',
+                    'required' => false,
+                    'multiple' => true,
+                    'data_class' => null
+                ))
+                ;   
         }
         else {
 
@@ -74,7 +88,13 @@ class RecetaType extends AbstractType
                 ->add('nombre')
                 ->add('ingredientes')
                 ->add('preparacion')
-                ->add('dificultad')
+                ->add('dificultad', ChoiceType::class, array(
+                    'choices'=> array(
+                        'Fácil' => 'Fácil',
+                        'Media' => 'Media',
+                        'Difícil' => 'Difícil'
+                    )
+                ))
                 //->add('created')
                 ->add('usuario') 
                 ->add('categoria')

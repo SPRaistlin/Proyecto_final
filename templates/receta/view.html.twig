@@ -65,4 +65,23 @@
         <td colspan="7">no records found</td>
     </tr>
 {% endfor %}
+  <h1>Fotos</h1>
+{% for imgs in fotos %}
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ imgs.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Imagen</th>
+                <td><img src="/{{ imgs.path }}/{{ imgs.url }}"  alt="{{ imgs.nombre }}" title="{{ imgs.nombre }}" /></td>
+            </tr>
+        </tbody>
+    </table>
+{% else %}
+    <tr>
+        <td colspan="7">no records found</td>
+    </tr>
+{% endfor %}
 {% endblock %}

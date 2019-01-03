@@ -1,18 +1,33 @@
-{% extends 'base.html.twig' %}
+{% extends 'usuario/baseColumnLeft.html.twig' %}
 
 {% block title %}Edita tus datos{% endblock %}
 
 {% block body %}
-    <h1>Edit Usuario</h1>
-{% if app.request.get("change") == 'ok' %}
-    <div class="alert alert-success">
-     <strong>Enhorabuena!</strong> tus datos han sido modificados.
-    </div>
-{% elseif app.request.get("change") == 'ko'  %}
-    <div class="alert alert-danger">
-     <strong>Fatality!</strong> tus datos no se han podido modificar, por favor inténtalo de nuevo.
-    </div> 
-{% endif %}
-    {{ include('usuario/_form.html.twig', {'button_label': 'Update'}) }}
+	<div class="content">
+	    <h2>Hola, {{ app.user.username }}</h2>
 
+		{% if app.request.get("change") == 'ok' %}
+		    <div class="alert alert-success">
+		     <strong>Enhorabuena!</strong> tus datos han sido modificados.
+		    </div>
+		{% elseif app.request.get("change") == 'ko'  %}
+		    <div class="alert alert-danger">
+		     <strong>Fatality!</strong> tus datos no se han podido modificar, te jodes.
+		    </div> 
+		{% endif %}
+
+		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+
+	    {{ render(controller(
+	        'App\\Controller\\UsuarioController::recetasUsuario',
+	        {'userid': app.user.id, 'max': 3}
+
+	    )) }}
+	    <h2>Información de Contacto</h2>
+	    {{ app.user.nombre }}
+	    <br/>
+	    {{ app.user.email }}
+	    <br/>
+	    <a href="{{ path('editarPerfil', {'usuario' : app.user.username}) }}">Cambiar contraseña</a>
+</div>
 {% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'usuario/baseColumnLeft.html.twig' %}
+
+{% block body %}
+    <h2>Mis Comentarios</h2>
+<table>
+	<tr>
+		<th>Publicado en</th>
+		<th>Comentario</th>
+		<th>Fecha publicación</th>
+	</tr>
+   {% for comentario in comentarios %}
+   	<tr>
+   		<td>  
+            <p><a href="{{ path('mostrar_receta', {'nombre' : comentario.categoria|lower , 'slug' : comentario.slug|lower}) }}" class="title">{{ comentario.nombre }}</a></p> 
+        </td>
+        <td>
+            <p>{{ comentario.comentario }}</p>
+        </td>
+        <td>
+            <p>{{ comentario.created|date }}</p>
+        </td>           
+        {% else %}
+        	<td>
+             	<div class="well">No se han encontrado comentarios</div>
+         	</td>
+    </tr>
+   {% endfor %}  
+</table>
+{% endblock %}

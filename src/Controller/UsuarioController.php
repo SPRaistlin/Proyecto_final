@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Doctrine\ORM\Query;
 
 class UsuarioController extends AbstractController
 {
@@ -123,24 +124,111 @@ class UsuarioController extends AbstractController
     /**
      * @Route("/perfil/{usuario}", name="perfil", methods="GET|POST")
      */
-    public function perfilUsuario(Request $request,Usuario $usuario): Response {
-        
-        
-        $form = $this->createForm(UsuarioType::class, $usuario);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) 
-        {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('perfil', ['apodo' => $usuario->getApodo(), 'change' => 'ok']);
-        } 
-        else if ($form->isEmpty() && $form->isDisabled())
-        {
-            return $this->redirectToRoute('perfil', ['apodo' => $usuario->getApodo(), 'change' => 'ko']);
-        }        
+    public function perfilUsuario(UsuarioRepository $usuarioRepository, Request $request): Response {
 
         return $this->render('usuario/perfil.html.twig', [
+            'usuario' => $request->get('usuario')
+        ]);
+    }
+
+    public function recetasUsuario(Usuario $usuario, $userid, $max)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $recetas = $em->getRepository('App:Receta');
+
+
+        return $this->render('usuario/listadoRecetas.html.twig', [
+            'recetas' => $recetas->findBy( array(
+                'usuario' =>$userid
+            ),array(
+                'created' => 'DESC',
+            ),
+            $max)
+        ]);
+
+    }
+
+    /**
+     * @Route("/perfil/{usuario}/mis-recetas", name="perfil", methods="GET|POST")
+     */
+    public function misRecetas(UsuarioRepository $usuarioRepository, Request $request): Response
+    {
+        //$validator = md5("muchomasquerecetas");
+        //if ($validator == $request->get('validate')) 
+        //{         
+            $em = $this->getDoctrine()->getManager();
+            $recetas = $em->getRepository('App:Receta');
+            $usuario = $usuarioRepository->findOneBy([
+                'apodo' => $request->get('usuario'),
+            ]);
+
+            return $this->render('usuario/todasRecetasUsuario.html.twig', [
+                'recetas' => $recetas->findBy( array(
+                    'usuario' =>$usuario->getId()
+                ),array(
+                    'created' => 'DESC',
+                ))
+            ]);   
+        /*}
+        else {
+            return  $this->render('usuario/todasRecetasUsuario.html.twig', [
+                'error' => 1
+            ]);  
+        }*/
+
+    }
+
+    /**
+     * @Route("/perfil/{usuario}/mis-recetas", name="perfil", methods="GET|POST")
+     */
+    public function misComentarios(UsuarioRepository $usuarioRepository, Request $request): Response
+    {
+        //$validator = md5("muchomasquerecetas");
+        //if ($validator == $request->get('validate')) 
+        //{
+        $usuario = $usuarioRepository->findOneBy(array('apodo' => $request->get('usuario')));
+        $usuarioid = $usuario->getId();
+        $em = $this->getDoctrine()->getManager();
+        $query = $em
+            ->createQuery("
+                SELECT DISTINCT r.nombre, r.slug, ct.nombre AS categoria, c.comentario, c.created 
+                FROM App:Receta r 
+                INNER JOIN App:Comentario c 
+                WITH c.receta = r.id 
+                INNER JOIN App:Categoria ct
+                WITH ct.id = r.categoria
+                WHERE c.usuario = :parameter
+            ")
+            ->setParameter('parameter', $usuarioid);
+        //$usuario = $usuarioRepository->findOneBy(array('apodo' => $request->get('usuario')));
+        //$usuarioid = $usuario->getId();
+        //$comentarios = $em->getRepository('App:Comentario')->findBy(array('usuario' => $usuarioid));
+        //$recetas = $em->getRepository('App:Receta')->findBy(array('usuario' => $usuarioid));
+        //$recetaid = $recetas->getId();
+        return $this->render('usuario/todosComentariosUsuario.html.twig', array('comentarios' => $query->getResult())); 
+        /*}
+        else {
+            return  $this->render('usuario/todasRecetasUsuario.html.twig', [
+                'error' => 1
+            ]);  
+        }*/
+
+    }
+
+    /**
+     * @Route("/perfil/{usuario}/editar-perfil", name="editarPerfil", methods="GET|POST")
+     */
+    public function editarPerfil(Request $request, UsuarioRepository $usuarioRepository): Response
+    {
+        $usuario = $usuarioRepository->findOneBy(array('apodo' => $request->get('usuario')));
+        $form = $this->createForm(UsuarioType::class, $usuario);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('editarPerfil', ['apodo' => $usuario->getApodo()]);
+        }
+        return $this->render('usuario/informacionCuenta.html.twig', [
             'usuario' => $usuario,
             'form' => $form->createView(),
         ]);

@@ -4,9 +4,9 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\FotoRepository")
- * @ORM\HasLifecycleCallbacks()
  */
 class Foto
 {
@@ -25,18 +25,17 @@ class Foto
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $ruta;
+    private $path;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="string", length=255)
      */
-    private $created;
+    private $url;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Receta", inversedBy="fotos")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\Column(type="integer")
      */
-    private $receta;
+    private $receta_id;
 
     public function getId(): ?int
     {
@@ -55,48 +54,39 @@ class Foto
         return $this;
     }
 
-    public function getRuta(): ?string
+    public function getPath(): ?string
     {
-        return $this->ruta;
+        return $this->path;
     }
 
-    public function setRuta(string $ruta): self
+    public function setPath(string $path): self
     {
-        $this->ruta = $ruta;
+        $this->path = $path;
 
         return $this;
     }
 
-    public function getCreated(): ?\DateTimeInterface
+    public function getUrl(): ?string
     {
-        return $this->created;
+        return $this->url;
     }
 
-    public function setCreated(\DateTimeInterface $created): self
+    public function setUrl(string $url): self
     {
-        $this->created = $created;
-
-        return $this;
-    }
-    
-    /**
-    * @ORM\PrePersist
-    */
-    public function setCreatedValue() {
-        $this->created = new \DateTime();
-    }
-
-
-    public function getRecetaId(): ?Receta
-    {
-        return $this->receta;
-    }
-
-    public function setRecetaId(?Receta $receta): self
-    {
-        $this->receta = $receta;
+        $this->url = $url;
 
         return $this;
     }
 
+    public function getRecetaId(): ?int
+    {
+        return $this->receta_id;
+    }
+
+    public function setRecetaId(int $receta_id): self
+    {
+        $this->receta_id = $receta_id;
+
+        return $this;
+    }
 }

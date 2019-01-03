@@ -3,7 +3,7 @@ index:
     controller: App\Controller\IndexController::index
 
 perfil:
-    path: /{_locale}/perfil/{apodo}
+    path: /{_locale}/perfil/{usuario}
     controller: App\Controller\UsuarioController::perfilUsuario
     requirements:
         _locale: es|en
@@ -33,12 +33,37 @@ crear-receta:
     requirements:
         _locale: es|en
 
+
 mostrar_receta:
     path: /{_locale}/{nombre}/{slug}
     controller:  App\Controller\RecetaController:mostrarRecetas
     requirements:
         _locale: es|en  
-    
+
+buscar:
+    path: /{_locale}/buscador/q={busqueda}
+    controller: App\Controller\RecetaController:buscador
+    requirements:
+        _locale: es|en
+
+mis-recetas:
+    path: /{_locale}/perfil/{usuario}/mis-recetas/
+    controller: App\Controller\UsuarioController:misRecetas
+    requirements:
+        _locale: es|en 
+
+mis-comentarios:
+    path: /{_locale}/perfil/{usuario}/mis-comentarios/
+    controller: App\Controller\UsuarioController:misComentarios
+    requirements:
+        _locale: es|en 
+
+editar-perfil:
+    path: /{_locale}/perfil/{usuario}/editar-perfil/
+    controller: App\Controller\UsuarioController::editarPerfil
+    requirements:
+        _locale: es|en
+
 #Admin routes#    
 perfil-admin:
     path: /admin/perfil/{user}

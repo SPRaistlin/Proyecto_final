@@ -3,15 +3,23 @@
 namespace App\Controller;
 
 use App\Entity\Receta;
-use App\Entity\Foto;
 use App\Form\RecetaType;
-use App\Form\FotoType;
 use App\Repository\RecetaRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Serializer\Serializer;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use App\Entity\Foto;
+use App\Form\FotoType;
+use App\Repository\FotoRepository;
+
 
 class RecetaController extends AbstractController
 {
@@ -121,9 +129,10 @@ class RecetaController extends AbstractController
         $receta = $em->getRepository('App:Receta')->findOneBy(array('slug' => $slug));
         $recetaid = $receta->getId();
         $comentarios = $em->getRepository('App:Comentario')->findBy(array('receta' => $recetaid));
-
+        $fotos = $em->getRepository('App:Foto')->findBy(array('receta_id' => $recetaid));
         return $this->render('receta/view.html.twig', ['recetas' =>$recetaRepository->findBy(array('slug' => $slug)),
-            'comentarios' => $comentarios
+            'comentarios' => $comentarios,
+            'fotos' => $fotos
         ]);
     }
     /** 
@@ -132,16 +141,20 @@ class RecetaController extends AbstractController
     public function crearReceta(Request $request): Response
     {
         
-
         $recetum = new Receta();
         $form = $this->createForm(RecetaType::class, $recetum);
         $form->handleRequest($request);
         $ok;
 
         if ($form->isSubmitted() && $form->isValid()) {
+            
             $em = $this->getDoctrine()->getManager();
+            $ano = date("Y");
+            $mes = date("m");
+            $contador = 1;
+            $slug = str_replace(" ","-", $form["nombre"]->getData());
+            $recetum->setSlug($slug);
 
-            //upload file
             if ($form["ruta"]->getData())
             {
                 $file = $form["ruta"]->getData();
@@ -156,9 +169,37 @@ class RecetaController extends AbstractController
                 $recetum->setPath($path);
                 $recetum ->setRuta($file_name);
             }
+
             $em->persist($recetum);
             $em->flush();
 
+
+            //almaceno en la tabla de imágenes los datos de las imágenes con el ID del post
+            foreach ($form->get('imgs')->getData() as $img) 
+            {
+
+               
+                $file = $img;
+                $title = $form["nombre"]->getData();
+                $ext = $img->guessExtension();
+                $file_name = time().$contador."-".str_replace(" ", "-", $title).".".$ext;
+                $file->getFilename();
+                $path = "uploads/".$ano."/".$mes;
+                $file->move($path, $file_name);
+                
+                //insertamos en BBDD
+                $foto = new Foto();
+                $em = $this->getDoctrine()->getManager();
+                //$foto = $em->getRepository('App:Foto');
+                $foto->setRecetaId($recetum->getId());
+                $foto->setNombre($form["nombre"]->getData());
+                $foto->setUrl($file_name);
+                $foto->setPath($path);
+                $em->persist($foto);
+                $em->flush();
+                $contador ++;
+
+            }   
             $this->addFlash("success","La receta se ha creado con éxito");
             $ok = 1;
             return $this->redirectToRoute('crearReceta', array(
@@ -166,14 +207,34 @@ class RecetaController extends AbstractController
             ));
         }
 
-
-
-
-
         return $this->render('receta/crearReceta.html.twig', [
             'recetum' => $recetum,
             'form' => $form->createView(),
         ]);
     }
       
+    /**
+    * Buscador
+    * @Route("/{_locale}/buscador/q={busqueda}", name="buscador", methods="GET|POST")
+    * @Route({
+     *  "es": "/buscador/q={busqueda}",
+     *  "en": "/{_locale}/buscador/q={busqueda}"
+     }, name="buscador")
+    */  
+    public function buscador(Request $request, $busqueda): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        $repository = $em->getRepository('App:Receta');
+        $query = $repository->createQueryBuilder('q')
+            ->where('q.nombre LIKE :busqueda')
+            ->setParameter('busqueda', '%'.$busqueda.'%')
+            ->orderBy('q.created', 'DESC')
+            ->getQuery();            
+        $resultado = $query->getResult();
+
+        return $this->render('receta/buscador.html.twig', [
+            'recetas' => $resultado,
+            'resultado' => $busqueda,
+        ]); 
+    }
 }

@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/base.html.twig' %}
 
 {% block title %}Foto index{% endblock %}
 
@@ -20,7 +20,7 @@
             <tr>
                 <td>{{ foto.id }}</td>
                 <td>{{ foto.nombre }}</td>
-                <td>{{ foto.slug }}</td>
+                <td>{{ foto.ruta }}</td>
                 <td>{{ foto.created ? foto.created|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
                     <a href="{{ path('foto_show', {'id': foto.id}) }}">show</a>
