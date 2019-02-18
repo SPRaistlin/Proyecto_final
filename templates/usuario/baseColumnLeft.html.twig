@@ -108,9 +108,20 @@
 
             
         })
+        $('#usuario_plainPassword_first').removeAttr('required');
+        $('#usuario_plainPassword_second').removeAttr('required');
     });
 </script>
 <script>
     $('.dropdown-toggle').dropdown();
+    /*
+    $('#cambiarContra').change( function(){
+        if(this.checked)
+        {
+            $('.plaindata').css("display", "block");
+        } else {
+            $('.plaindata').css("display", "none");
+        }
+    })*/
 </script>
 {% endblock %}

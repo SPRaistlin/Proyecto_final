@@ -77,6 +77,9 @@ class Usuario implements AdvancedUserInterface, \Serializable
     private $comentarios;
 
        
+    private $cambiarContra;
+
+
     /**
      * @return string
      */
@@ -329,6 +332,17 @@ class Usuario implements AdvancedUserInterface, \Serializable
         return $this;
     }
 
+    public function getCambiarContra(): ?bool
+    {
+        return $this->cambiarContra;
+    }
+
+    public function setCambiarContra(bool $cambiarContra)
+    {
+        $this->cambiarContra = $cambiarContra;
+
+        return $this;
+    }
     
 
 }

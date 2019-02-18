@@ -16,7 +16,7 @@ security:
         in_memory:
             memory:
                 users:
-                    admin: { password: $2y$13$jwgdL7Y7fXWfbWzYqVvSceUgVc81mluNgrykl2HC6JlTO4AjblhLi , roles: 'ROLE_SUPER_ADMIN'}    
+                    admin: { password: $2y$13$GyiQJPXm9zokc/2VGcegkOPdV8/asRe40GzZslZeDS54fWPbHFOPe , roles: 'ROLE_SUPER_ADMIN'}    
         usuario_provider:
             entity: 
                 class: App\Entity\Usuario

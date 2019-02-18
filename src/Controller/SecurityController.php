@@ -43,7 +43,7 @@ class SecurityController extends Controller
     {
         $session = $request->getSession();
         $session->invalidate();
-       $tokenStorage->setToken(null);
+        $tokenStorage->setToken(null);
         $response = new Response();
         $response->headers->clearCookie('REMEMBERME');
         $response->send();

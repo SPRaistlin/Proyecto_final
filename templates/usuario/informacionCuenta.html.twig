@@ -4,7 +4,37 @@
 
 {% block body %}
     <h1>Información de mi Cuenta</h1>
- {{ include('usuario/_form.html.twig', {'button_label': 'Update'}) }}
+ {{ form_start(form) }}
+ <div class="hidden">
+    <input type="hidden" id="usuario" name="usuario" value="{{ app.user.id }}">
+    <input type="hidden" id="contrasena" name="contrasena" value="{{ app.user.pass}}">
+ </div>
+ <div class="content">
+    <div class="personaldata">
+        {{ form_label(form.Nombre) }}
+        {{ form_widget(form.Nombre, { 'attr': {'class': 'name_field'} }) }}
+        {{ form_errors(form.Nombre) }}
+    </div>
+    <div class="personaldata">
+        {{ form_label(form.Apellidos) }}
+        {{ form_widget(form.Apellidos, { 'attr': {'class': 'apellidos_field'} }) }}   
+        {{ form_errors(form.Apellidos) }}
+    </div>
+    <div class="personaldata">
+        {{ form_label(form.email) }}
+        {{ form_widget(form.email, { 'attr': {'class': 'email_field'} }) }}   
+        {{ form_errors(form.email) }}
+    </div>
+     <div class="plaindata">
+        {{ form_widget(form.plainPassword, { 'attr': {'class': 'pass_field'} }) }}
+    </div>
+    <div class="control">
+        {{ form_widget(form.cambiarContra, { 'attr': {'class': 'checkbox_field'} }) }}   
+        {{ form_label(form.cambiarContra) }}
+        {{ form_errors(form.cambiarContra) }}
+    </div>
+</div>
+ {{ form_end(form) }}
 
 
 {% endblock %}

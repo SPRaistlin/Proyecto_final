@@ -218,18 +218,45 @@ class UsuarioController extends AbstractController
     /**
      * @Route("/perfil/{usuario}/editar-perfil", name="editarPerfil", methods="GET|POST")
      */
-    public function editarPerfil(Request $request, UsuarioRepository $usuarioRepository): Response
+    public function editarPerfil(Request $request, UsuarioRepository $usuarioRepository, UserPasswordEncoderInterface $passwordEncoder): Response
     {
+        
         $usuario = $usuarioRepository->findOneBy(array('apodo' => $request->get('usuario')));
         $form = $this->createForm(UsuarioType::class, $usuario);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        $form->remove('apodo');
+        $form->remove('isactive');
+        $form->handleRequest($request);   
 
-            return $this->redirectToRoute('editarPerfil', ['apodo' => $usuario->getApodo()]);
+        if ($form->isSubmitted() && $form->isValid()) {  
+
+            if ($form['cambiarContra']->getData()) {
+
+                $password = $passwordEncoder->encodePassword($usuario, $form['plainPassword']->getData());
+                $usuario->setPass($password);
+                $this->getDoctrine()->getManager()->flush();
+                return $this->redirectToRoute('editarPerfil', ['usuario' => $usuario->getApodo()]);
+
+            } else {
+
+                $actual = $usuario->getPass();
+                $nueva = $form['plainPassword']->getData();
+
+                if (password_verify($nueva, $actual))
+                {
+                    $usuario->setPass($actual);
+                    $this->getDoctrine()->getManager()->flush();
+                    return $this->redirectToRoute('editarPerfil', ['usuario' => $usuario->getApodo()]);
+
+                } else {
+
+                    print_r('La contraseña no es correcta');
+
+                }
+            }             
+           
         }
         return $this->render('usuario/informacionCuenta.html.twig', [
-            'usuario' => $usuario,
+            'usuario' => $usuario->getApodo(),
             'form' => $form->createView(),
         ]);
     }
